@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import br.com.rictodolist.todolist.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,8 +57,10 @@ public class TaskController {
 
   @PutMapping("/{id}")
   public TaskModel update(@RequestBody TaskModel taskModel, HttpServletRequest request, @PathVariable UUID id) {
-    taskModel.setId(id);
+    var task = this.taskRepository.findById(id).orElse(null);
 
-    return this.taskRepository.save(taskModel);
+    Utils.copyNonNullProperties(taskModel, task);
+
+    return this.taskRepository.save(task);
   }
 }
