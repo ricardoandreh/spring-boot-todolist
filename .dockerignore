@@ -1,0 +1,8 @@
+target
+.idea
+*.iml
+*.log
+*.tmp
+*.md
+Dockerfile
+.dockerignore
