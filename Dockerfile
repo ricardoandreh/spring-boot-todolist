@@ -1,4 +1,4 @@
-FROM docker.io/maven:3.8.5-openjdk-17-slim AS build
+FROM cgr.dev/chainguard/maven:latest AS build
 
 WORKDIR /app
 
@@ -13,6 +13,6 @@ WORKDIR /app
 
 COPY --from=build /app/target/*.jar app.jar
 
-EXPOSE 8080
+EXPOSE 10000
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar", "--server.port=10000"]
