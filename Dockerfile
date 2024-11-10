@@ -1,4 +1,4 @@
-FROM cgr.dev/chainguard/maven:latest AS build
+FROM docker.io/maven:3.9.9-amazoncorretto-17-alpine AS build
 
 WORKDIR /app
 
