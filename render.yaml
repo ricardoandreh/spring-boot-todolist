@@ -6,6 +6,6 @@ services:
     dockerfilePath: Dockerfile
     healthCheckPath: /actuator/health
     envVars:
-      - key: JAVA_OPTS
-        value: "-Xmx512m -Xms256m"
+      - key: JDK_JAVA_OPTIONS
+        value: -Xms256m -Xmx512m -Dspring.profiles.active=prod
     numInstances: 1

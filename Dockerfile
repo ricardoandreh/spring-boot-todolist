@@ -18,5 +18,6 @@ EXPOSE 10000
 
 USER nonroot:nonroot
 
+ENV JDK_JAVA_OPTIONS="-Xms256m -Xmx512m"
+
 ENTRYPOINT ["java", "-jar", "app.jar", "--server.port=10000"]
-CMD ["$JAVA_OPTS"]
