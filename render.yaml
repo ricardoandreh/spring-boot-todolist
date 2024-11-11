@@ -14,8 +14,24 @@ services:
     envVars:
       - key: JDK_JAVA_OPTIONS
         value: -Xms256m -Xmx512m -Dspring.profiles.active=prod
-      - key: DATABASE_URL
+      - key: DATABASE_HOST
         fromDatabase:
           name: todolist-db
-          property: connectionString
+          property: host
+      - key: DATABASE_PORT
+        fromDatabase:
+          name: todolist-db
+          property: port
+      - key: DATABASE_NAME
+        fromDatabase:
+          name: todolist-db
+          property: database
+      - key: DATABASE_USER
+        fromDatabase:
+          name: todolist-db
+          property: user
+      - key: DATABASE_PASSWORD
+        fromDatabase:
+          name: todolist-db
+          property: password
     numInstances: 1
