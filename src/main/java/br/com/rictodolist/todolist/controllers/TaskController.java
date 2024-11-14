@@ -1,66 +1,68 @@
 package br.com.rictodolist.todolist.controllers;
 
-import java.util.List;
-import java.util.UUID;
-
-import br.com.rictodolist.todolist.domain.task.TaskModel;
+import br.com.rictodolist.todolist.dtos.TaskRequestDTO;
+import br.com.rictodolist.todolist.dtos.TaskResponseDTO;
+import br.com.rictodolist.todolist.dtos.TaskUpdateDTO;
+import br.com.rictodolist.todolist.models.TaskModel;
 import br.com.rictodolist.todolist.services.TaskService;
-
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
+import java.util.List;
+import java.util.UUID;
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/tasks")
 public class TaskController {
 
-  @Autowired
-  private TaskService taskService;
+    @Autowired
+    private TaskService taskService;
 
-  @PostMapping("/")
-  public ResponseEntity<TaskModel> create(@RequestBody @Valid TaskModel taskModel, HttpServletRequest request) {
-    UUID idUser = (UUID) request.getAttribute("idUser");
+    @PostMapping("/")
+    public ResponseEntity<TaskResponseDTO> create(@Valid @RequestBody TaskRequestDTO taskRequestDto, HttpServletRequest request) {
+        UUID idUser = (UUID) request.getAttribute("idUser");
 
-    TaskModel task = this.taskService.create(taskModel, idUser);
+        TaskResponseDTO task = this.taskService.create(taskRequestDto, idUser);
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(task);
-  }
+        return ResponseEntity.status(HttpStatus.CREATED).body(task);
+    }
 
-  @GetMapping("/{id}")
-  public ResponseEntity<TaskModel> listOne(HttpServletRequest request, @PathVariable UUID id) {
-    UUID idUser = (UUID) request.getAttribute("idUser");
+    @GetMapping("/{id}")
+    public ResponseEntity<TaskResponseDTO> listOne(HttpServletRequest request, @PathVariable(value = "id") UUID id) {
+        UUID idUser = (UUID) request.getAttribute("idUser");
 
-    TaskModel task = this.taskService.getOne(id, idUser);
+        TaskResponseDTO task = this.taskService.getOne(id, idUser);
 
-    return ResponseEntity.status(HttpStatus.OK).body(task);
-  }
+        return ResponseEntity.status(HttpStatus.OK).body(task);
+    }
 
-  @GetMapping("/")
-  public List<TaskModel> listAll(HttpServletRequest request) {
-    UUID idUser = (UUID) request.getAttribute("idUser");
+    @GetMapping("/")
+    public List<TaskResponseDTO> listAll(HttpServletRequest request) {
+        UUID idUser = (UUID) request.getAttribute("idUser");
 
-    return this.taskService.getAll(idUser);
-  }
+        return this.taskService.getAll(idUser);
+    }
 
-  @PutMapping("/{id}")
-  public ResponseEntity<TaskModel> update(@RequestBody @Valid TaskModel taskModel, HttpServletRequest request, @PathVariable UUID id) {
-    UUID idUser = (UUID) request.getAttribute("idUser");
+    @PutMapping("/{id}")
+    public ResponseEntity<TaskResponseDTO> update(@Valid @RequestBody TaskUpdateDTO taskUpdateDto, HttpServletRequest request, @PathVariable(value = "id") UUID id) {
+        UUID idUser = (UUID) request.getAttribute("idUser");
 
-    TaskModel taskUpdated = this.taskService.update(taskModel, id, idUser);
+        TaskResponseDTO taskUpdated = this.taskService.update(taskUpdateDto, id, idUser);
 
-    return ResponseEntity.ok(taskUpdated);
-  }
+        return ResponseEntity.status(HttpStatus.OK).body(taskUpdated);
+    }
 
-  @DeleteMapping("/{id}")
-  public ResponseEntity<TaskModel> delete(HttpServletRequest request, @PathVariable UUID id) {
-    UUID idUser = (UUID) request.getAttribute("idUser");
+    @DeleteMapping("/{id}")
+    public ResponseEntity<TaskResponseDTO> delete(HttpServletRequest request, @PathVariable(value = "id") UUID id) {
+        UUID idUser = (UUID) request.getAttribute("idUser");
 
-    TaskModel taskDeleted = this.taskService.delete(id, idUser);
+        TaskResponseDTO taskDeleted = this.taskService.delete(id, idUser);
 
-    return ResponseEntity.ok(taskDeleted);
-  }
+        return ResponseEntity.status(HttpStatus.OK).body(taskDeleted);
+    }
 }
