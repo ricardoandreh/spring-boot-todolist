@@ -3,7 +3,6 @@ package br.com.rictodolist.todolist.controllers;
 import br.com.rictodolist.todolist.dtos.TaskRequestDTO;
 import br.com.rictodolist.todolist.dtos.TaskResponseDTO;
 import br.com.rictodolist.todolist.dtos.TaskUpdateDTO;
-import br.com.rictodolist.todolist.models.TaskModel;
 import br.com.rictodolist.todolist.services.TaskService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
