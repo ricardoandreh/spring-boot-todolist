@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,7 +23,7 @@ public class TaskService {
     @Autowired
     private ITaskRepository taskRepository;
 
-    public TaskResponseDTO create(TaskRequestDTO taskRequestDto, UUID id) {
+    public TaskModel create(TaskRequestDTO taskRequestDto, UUID id) {
         var currentDate = LocalDateTime.now();
 
         if (currentDate.isAfter(taskRequestDto.startAt()) || currentDate.isAfter(taskRequestDto.endAt())) {
@@ -40,20 +39,10 @@ public class TaskService {
         BeanUtils.copyProperties(taskRequestDto, taskModel);
         taskModel.setIdUser(id);
 
-        TaskModel taskCreated = this.taskRepository.save(taskModel);
-
-        return new TaskResponseDTO(
-                taskCreated.getId(),
-                taskCreated.getTitle(),
-                taskCreated.getDescription(),
-                taskCreated.getStartAt(),
-                taskCreated.getEndAt(),
-                taskCreated.getPriority(),
-                taskCreated.getCreatedAt()
-        );
+        return this.taskRepository.save(taskModel);
     }
 
-    public TaskResponseDTO getOne(UUID idTask, UUID idUser) {
+    public TaskModel getOne(UUID idTask, UUID idUser) {
         TaskModel task = this.taskRepository.findById(idTask).orElse(null);
 
         if (task == null) {
@@ -64,38 +53,14 @@ public class TaskService {
             throw new AccessDeniedException("Usuário não tem permissão para visualizar essa tarefa");
         }
 
-        return new TaskResponseDTO(
-                task.getId(),
-                task.getTitle(),
-                task.getDescription(),
-                task.getStartAt(),
-                task.getEndAt(),
-                task.getPriority(),
-                task.getCreatedAt()
-        );
+        return task;
     }
 
-    public List<TaskResponseDTO> getAll(UUID id) {
-        List<TaskModel> tasks = this.taskRepository.findByIdUser(id);
-
-        List<TaskResponseDTO> taskResponseDtos = new ArrayList<>();
-
-        for (TaskModel task : tasks) {
-            taskResponseDtos.add(new TaskResponseDTO(
-                    task.getId(),
-                    task.getTitle(),
-                    task.getDescription(),
-                    task.getStartAt(),
-                    task.getEndAt(),
-                    task.getPriority(),
-                    task.getCreatedAt()
-            ));
-        }
-
-        return taskResponseDtos;
+    public List<TaskModel> getAll(UUID id) {
+        return this.taskRepository.findByIdUser(id);
     }
 
-    public TaskResponseDTO update(TaskUpdateDTO taskUpdateDto, UUID idTask, UUID idUser) {
+    public TaskModel update(TaskUpdateDTO taskUpdateDto, UUID idTask, UUID idUser) {
         TaskModel task = this.taskRepository.findById(idTask).orElse(null);
 
         if (task == null) {
@@ -108,20 +73,10 @@ public class TaskService {
 
         Utils.copyNonNullProperties(taskUpdateDto, task);
 
-        TaskModel taskUpdated = this.taskRepository.save(task);
-
-        return new TaskResponseDTO(
-                taskUpdated.getId(),
-                taskUpdated.getTitle(),
-                taskUpdated.getDescription(),
-                taskUpdated.getStartAt(),
-                taskUpdated.getEndAt(),
-                taskUpdated.getPriority(),
-                taskUpdated.getCreatedAt()
-        );
+        return this.taskRepository.save(task);
     }
 
-    public TaskResponseDTO delete(UUID idTask, UUID idUser) {
+    public TaskModel delete(UUID idTask, UUID idUser) {
         TaskModel task = this.taskRepository.findById(idTask).orElse(null);
 
         if (task == null) {
@@ -134,14 +89,6 @@ public class TaskService {
 
         this.taskRepository.delete(task);
 
-        return new TaskResponseDTO(
-                task.getId(),
-                task.getTitle(),
-                task.getDescription(),
-                task.getStartAt(),
-                task.getEndAt(),
-                task.getPriority(),
-                task.getCreatedAt()
-        );
+        return task;
     }
 }

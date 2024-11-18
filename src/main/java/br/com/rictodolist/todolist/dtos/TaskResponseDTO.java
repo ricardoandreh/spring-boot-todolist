@@ -1,5 +1,7 @@
 package br.com.rictodolist.todolist.dtos;
 
+import org.springframework.hateoas.Link;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -10,5 +12,6 @@ public record TaskResponseDTO(
         LocalDateTime startAt,
         LocalDateTime endAt,
         String priority,
-        LocalDateTime createdAt) {
+        LocalDateTime createdAt,
+        Link links) {
 }
