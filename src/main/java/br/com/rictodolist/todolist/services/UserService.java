@@ -16,7 +16,7 @@ public class UserService {
     @Autowired
     private IUserRepository userRepository;
 
-    public UserResponseDTO create(UserRequestDTO userRequestDto) {
+    public UserModel create(UserRequestDTO userRequestDto) {
         UserModel user = this.userRepository.findByUsername(userRequestDto.username());
 
         if (user != null) {
@@ -31,13 +31,6 @@ public class UserService {
         BeanUtils.copyProperties(userRequestDto, userModel);
         userModel.setPassword(passwordHashed);
 
-        UserModel userCreated = this.userRepository.save(userModel);
-
-        return new UserResponseDTO(
-                userCreated.getId(),
-                userCreated.getUsername(),
-                userCreated.getName(),
-                userCreated.getCreatedAt()
-        );
+        return this.userRepository.save(userModel);
     }
 }

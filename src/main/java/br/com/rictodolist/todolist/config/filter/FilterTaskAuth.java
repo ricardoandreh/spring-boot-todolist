@@ -1,4 +1,4 @@
-package br.com.rictodolist.todolist.filter;
+package br.com.rictodolist.todolist.config.filter;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import at.favre.lib.crypto.bcrypt.BCrypt.Result;

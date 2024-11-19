@@ -1,4 +1,4 @@
-package br.com.rictodolist.todolist.infra.errors;
+package br.com.rictodolist.todolist.config.errors;
 
 import br.com.rictodolist.todolist.exceptions.AccessDeniedException;
 import br.com.rictodolist.todolist.exceptions.DateValidationException;

@@ -7,22 +7,22 @@ import static org.junit.jupiter.api.Assertions.*;
 class TaskServiceTest {
 
     @Test
-    void createCase1() {
+    void createTaskCase1() {
     }
 
     @Test
-    void getOne() {
+    void getOneTaskCase1() {
     }
 
     @Test
-    void getAll() {
+    void getAllTasksCase1() {
     }
 
     @Test
-    void update() {
+    void updateTaskCase1() {
     }
 
     @Test
-    void delete() {
+    void deleteTaskCase1() {
     }
 }

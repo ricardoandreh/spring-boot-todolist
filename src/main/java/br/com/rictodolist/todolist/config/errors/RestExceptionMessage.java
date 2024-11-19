@@ -1,4 +1,4 @@
-package br.com.rictodolist.todolist.infra.errors;
+package br.com.rictodolist.todolist.config.errors;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
