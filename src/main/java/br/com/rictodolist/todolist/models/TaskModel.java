@@ -1,10 +1,15 @@
 package br.com.rictodolist.todolist.models;
 
+import br.com.rictodolist.todolist.validations.annotations.DateRange;
+import br.com.rictodolist.todolist.validations.annotations.FutureDate;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -32,9 +37,11 @@ public class TaskModel {
     private String description;
 
     @NotNull
+    @FutureDate
     private LocalDateTime startAt;
 
     @NotNull
+    @FutureDate
     private LocalDateTime endAt;
 
     @NotNull

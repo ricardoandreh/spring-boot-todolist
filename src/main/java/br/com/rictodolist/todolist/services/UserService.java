@@ -2,7 +2,6 @@ package br.com.rictodolist.todolist.services;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import br.com.rictodolist.todolist.dtos.UserRequestDTO;
-import br.com.rictodolist.todolist.dtos.UserResponseDTO;
 import br.com.rictodolist.todolist.exceptions.UserAlreadyExistException;
 import br.com.rictodolist.todolist.models.UserModel;
 import br.com.rictodolist.todolist.repositories.IUserRepository;

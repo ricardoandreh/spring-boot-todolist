@@ -1,7 +1,6 @@
 package br.com.rictodolist.todolist.config.errors;
 
 import br.com.rictodolist.todolist.exceptions.AccessDeniedException;
-import br.com.rictodolist.todolist.exceptions.DateValidationException;
 import br.com.rictodolist.todolist.exceptions.TaskNotFoundException;
 import br.com.rictodolist.todolist.exceptions.UserAlreadyExistException;
 import org.springframework.http.HttpStatus;
@@ -29,13 +28,17 @@ public class RestExceptionHandler {
     public ResponseEntity<Map<String, String>> methodArgumentNotValidHandler(MethodArgumentNotValidException e) {
         Map<String, String> errors = new HashMap<>();
 
-        e.getBindingResult()
-                .getAllErrors().forEach((error) -> {
-                    String fieldName = ((FieldError) error).getField();
-                    String errorMessage = error.getDefaultMessage();
-
-                    errors.put(fieldName, errorMessage);
-                });
+        e.getBindingResult().getAllErrors().forEach((error) -> {
+            if (error instanceof FieldError) {
+                String fieldName = ((FieldError) error).getField();
+                String errorMessage = error.getDefaultMessage();
+                errors.put(fieldName, errorMessage);
+            } else {
+                String objectName = error.getObjectName();
+                String errorMessage = error.getDefaultMessage();
+                errors.put(objectName, errorMessage);
+            }
+        });
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
@@ -52,13 +55,6 @@ public class RestExceptionHandler {
         RestExceptionMessage threatResponse = new RestExceptionMessage(HttpStatus.FORBIDDEN, e.getMessage());
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(threatResponse);
-    }
-
-    @ExceptionHandler(DateValidationException.class)
-    public ResponseEntity<RestExceptionMessage> dateValidationHandler(DateValidationException e) {
-        RestExceptionMessage threatResponse = new RestExceptionMessage(HttpStatus.BAD_REQUEST, e.getMessage());
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(threatResponse);
     }
 
     @ExceptionHandler(UserAlreadyExistException.class)
