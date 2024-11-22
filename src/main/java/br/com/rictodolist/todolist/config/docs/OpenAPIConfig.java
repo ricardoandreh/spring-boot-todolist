@@ -1,4 +1,4 @@
-package br.com.rictodolist.todolist.config;
+package br.com.rictodolist.todolist.config.docs;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;

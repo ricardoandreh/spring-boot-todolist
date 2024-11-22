@@ -31,7 +31,7 @@ public class TaskController {
     public ResponseEntity<TaskResponseDTO> create(@Valid @RequestBody TaskRequestDTO taskRequestDto, HttpServletRequest request) {
         UUID idUser = (UUID) request.getAttribute("idUser");
 
-        TaskModel task = this.taskService.create(taskRequestDto, idUser);
+        TaskModel task = this.taskService.create(taskRequestDto);
 
         TaskResponseDTO taskResponseDto = new TaskResponseDTO(
                 task.getId(),
@@ -49,9 +49,7 @@ public class TaskController {
 
     @GetMapping("/{id}")
     public ResponseEntity<TaskResponseDTO> listOne(HttpServletRequest request, @PathVariable(value = "id") UUID id) {
-        UUID idUser = (UUID) request.getAttribute("idUser");
-
-        TaskModel task = this.taskService.getOne(id, idUser);
+        TaskModel task = this.taskService.getOne(id);
 
         TaskResponseDTO taskResponseDto = new TaskResponseDTO(
                 task.getId(),
@@ -93,9 +91,7 @@ public class TaskController {
 
     @PutMapping("/{id}")
     public ResponseEntity<TaskResponseDTO> update(@Valid @RequestBody TaskUpdateDTO taskUpdateDto, HttpServletRequest request, @PathVariable(value = "id") UUID id) {
-        UUID idUser = (UUID) request.getAttribute("idUser");
-
-        TaskModel taskUpdated = this.taskService.update(taskUpdateDto, id, idUser);
+        TaskModel taskUpdated = this.taskService.update(taskUpdateDto, id);
 
         TaskResponseDTO taskResponseDto = new TaskResponseDTO(
                 taskUpdated.getId(),
@@ -113,9 +109,7 @@ public class TaskController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<TaskResponseDTO> delete(HttpServletRequest request, @PathVariable(value = "id") UUID id) {
-        UUID idUser = (UUID) request.getAttribute("idUser");
-
-        TaskModel taskDeleted = this.taskService.delete(id, idUser);
+        TaskModel taskDeleted = this.taskService.delete(id);
 
         TaskResponseDTO taskResponseDto = new TaskResponseDTO(
                 taskDeleted.getId(),

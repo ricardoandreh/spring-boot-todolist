@@ -1,5 +1,6 @@
 package br.com.rictodolist.todolist.services;
 
+import br.com.rictodolist.todolist.config.security.Role;
 import br.com.rictodolist.todolist.dtos.UserRequestDTO;
 import br.com.rictodolist.todolist.exceptions.UserAlreadyExistException;
 import br.com.rictodolist.todolist.models.UserModel;
@@ -12,18 +13,19 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-class UserServiceTest {
+class AuthServiceTest {
 
     @Mock
     private IUserRepository userRepository;
 
     @InjectMocks
-    private UserService userService;
+    private AuthService authService;
 
     @BeforeEach
     void setup() {
@@ -38,7 +40,8 @@ class UserServiceTest {
                 "user",
                 null,
                 "user",
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                Role.USER, null
         );
 
         UserRequestDTO userRequestDto = new UserRequestDTO(
@@ -47,13 +50,13 @@ class UserServiceTest {
                 userModel.getPassword()
         );
 
-        when(userRepository.findByUsername(userRequestDto.username())).thenReturn(null); // O Usuário ainda não existe
-        when(userRepository.save(any(UserModel.class))).thenReturn(userModel);
+        when(this.userRepository.findByUsername(userRequestDto.username())).thenReturn(null); // O Usuário ainda não existe
+        when(this.userRepository.save(any(UserModel.class))).thenReturn(userModel);
 
-        this.userService.create(userRequestDto);
+        this.authService.register(userRequestDto);
 
-        verify(userRepository, times(1)).findByUsername(userRequestDto.username());
-        verify(userRepository, times(1)).save(any(UserModel.class));
+        verify(this.userRepository, times(1)).findByUsername(userRequestDto.username());
+        verify(this.userRepository, times(1)).save(any(UserModel.class));
     }
 
     @Test
@@ -64,7 +67,8 @@ class UserServiceTest {
                 "user",
                 null,
                 "user",
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                Role.USER, null
         );
 
         UserRequestDTO userRequestDto = new UserRequestDTO(
@@ -73,11 +77,11 @@ class UserServiceTest {
                 existingUser.getPassword()
         );
 
-        when(userRepository.findByUsername(userRequestDto.username())).thenReturn(existingUser);
+        when(this.userRepository.findByUsername(userRequestDto.username())).thenReturn(Optional.of(existingUser));
 
-        assertThrows(UserAlreadyExistException.class, () -> userService.create(userRequestDto));
+        assertThrows(UserAlreadyExistException.class, () -> this.authService.register(userRequestDto));
 
-        verify(userRepository, times(1)).findByUsername(userRequestDto.username());
-        verify(userRepository, never()).save(any(UserModel.class));
+        verify(this.userRepository, times(1)).findByUsername(userRequestDto.username());
+        verify(this.userRepository, never()).save(any(UserModel.class));
     }
 }

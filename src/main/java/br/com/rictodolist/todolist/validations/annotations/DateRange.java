@@ -20,4 +20,3 @@ public @interface DateRange {
 
     Class<? extends Payload>[] payload() default {};
 }
-
