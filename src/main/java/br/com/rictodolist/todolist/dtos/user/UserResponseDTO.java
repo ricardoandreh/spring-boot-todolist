@@ -1,4 +1,4 @@
-package br.com.rictodolist.todolist.dtos;
+package br.com.rictodolist.todolist.dtos.user;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

@@ -1,5 +1,6 @@
 package br.com.rictodolist.todolist.models;
 
+import br.com.rictodolist.todolist.validations.annotations.DateRange;
 import br.com.rictodolist.todolist.validations.annotations.FutureDate;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -10,7 +11,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -21,6 +21,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tb_tasks")
+@DateRange(
+        startDateField = "startAt",
+        endDateField = "endAt"
+)
 public class TaskModel {
 
     @Id
@@ -52,7 +56,7 @@ public class TaskModel {
     private LocalDateTime createdAt;
 
     @NotNull
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id")
-    private UserDetails user;
+    private UserModel user;
 }

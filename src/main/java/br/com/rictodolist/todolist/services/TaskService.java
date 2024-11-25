@@ -1,10 +1,11 @@
 package br.com.rictodolist.todolist.services;
 
-import br.com.rictodolist.todolist.dtos.TaskRequestDTO;
-import br.com.rictodolist.todolist.dtos.TaskUpdateDTO;
+import br.com.rictodolist.todolist.dtos.task.TaskRequestDTO;
+import br.com.rictodolist.todolist.dtos.task.TaskUpdateDTO;
 import br.com.rictodolist.todolist.exceptions.AccessDeniedException;
 import br.com.rictodolist.todolist.exceptions.TaskNotFoundException;
 import br.com.rictodolist.todolist.models.TaskModel;
+import br.com.rictodolist.todolist.models.UserModel;
 import br.com.rictodolist.todolist.repositories.ITaskRepository;
 import br.com.rictodolist.todolist.repositories.IUserRepository;
 import br.com.rictodolist.todolist.utils.Utils;
@@ -35,7 +36,7 @@ public class TaskService {
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
 
         BeanUtils.copyProperties(taskRequestDto, taskModel);
-        taskModel.setUser(user);
+        taskModel.setUser((UserModel) user);
 
         return this.taskRepository.save(taskModel);
     }
@@ -52,8 +53,10 @@ public class TaskService {
         return task;
     }
 
-    public List<TaskModel> getAll(UUID idUser) {
-        return this.taskRepository.findByIdUser(idUser);
+    public List<TaskModel> getAll() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        return this.taskRepository.findByUserUsername(username);
     }
 
     public TaskModel update(TaskUpdateDTO taskUpdateDto, UUID id) {

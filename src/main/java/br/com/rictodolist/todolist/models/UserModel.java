@@ -2,6 +2,7 @@ package br.com.rictodolist.todolist.models;
 
 import br.com.rictodolist.todolist.config.security.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -9,7 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.scheduling.config.Task;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,6 +37,7 @@ public class UserModel implements UserDetails {
     @NotBlank
     private String username;
 
+    @Max(value = 30, message = "O nome deve possuir no máximo 30 caracteres")
     private String name;
 
     @NotNull
@@ -50,7 +51,7 @@ public class UserModel implements UserDetails {
     private Role role;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Task> tasks;
+    private List<TaskModel> tasks;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

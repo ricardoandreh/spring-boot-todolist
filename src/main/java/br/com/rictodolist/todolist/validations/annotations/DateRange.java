@@ -19,4 +19,8 @@ public @interface DateRange {
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
+
+    String startDateField();
+
+    String endDateField();
 }

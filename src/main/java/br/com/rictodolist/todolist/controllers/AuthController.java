@@ -1,8 +1,8 @@
 package br.com.rictodolist.todolist.controllers;
 
-import br.com.rictodolist.todolist.dtos.LoginResponseDTO;
-import br.com.rictodolist.todolist.dtos.UserRequestDTO;
-import br.com.rictodolist.todolist.dtos.UserResponseDTO;
+import br.com.rictodolist.todolist.dtos.user.LoginResponseDTO;
+import br.com.rictodolist.todolist.dtos.user.UserRequestDTO;
+import br.com.rictodolist.todolist.dtos.user.UserResponseDTO;
 import br.com.rictodolist.todolist.models.UserModel;
 import br.com.rictodolist.todolist.services.AuthService;
 import jakarta.validation.Valid;

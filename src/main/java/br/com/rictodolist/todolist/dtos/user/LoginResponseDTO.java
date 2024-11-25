@@ -1,4 +1,4 @@
-package br.com.rictodolist.todolist.dtos;
+package br.com.rictodolist.todolist.dtos.user;
 
 public record LoginResponseDTO(String access) {
 }

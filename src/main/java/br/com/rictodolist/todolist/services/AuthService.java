@@ -1,7 +1,7 @@
 package br.com.rictodolist.todolist.services;
 
 import br.com.rictodolist.todolist.config.security.Role;
-import br.com.rictodolist.todolist.dtos.UserRequestDTO;
+import br.com.rictodolist.todolist.dtos.user.UserRequestDTO;
 import br.com.rictodolist.todolist.exceptions.UserAlreadyExistException;
 import br.com.rictodolist.todolist.models.UserModel;
 import br.com.rictodolist.todolist.repositories.IUserRepository;

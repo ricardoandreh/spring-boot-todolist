@@ -1,8 +1,8 @@
 package br.com.rictodolist.todolist.controllers;
 
-import br.com.rictodolist.todolist.dtos.TaskRequestDTO;
-import br.com.rictodolist.todolist.dtos.TaskResponseDTO;
-import br.com.rictodolist.todolist.dtos.TaskUpdateDTO;
+import br.com.rictodolist.todolist.dtos.task.TaskRequestDTO;
+import br.com.rictodolist.todolist.dtos.task.TaskResponseDTO;
+import br.com.rictodolist.todolist.dtos.task.TaskUpdateDTO;
 import br.com.rictodolist.todolist.models.TaskModel;
 import br.com.rictodolist.todolist.services.TaskService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -67,9 +67,7 @@ public class TaskController {
 
     @GetMapping("/")
     public List<TaskResponseDTO> listAll(HttpServletRequest request) {
-        UUID idUser = (UUID) request.getAttribute("idUser");
-
-        List<TaskModel> tasks = this.taskService.getAll(idUser);
+        List<TaskModel> tasks = this.taskService.getAll();
 
         List<TaskResponseDTO> taskResponseDtos = new ArrayList<>();
 

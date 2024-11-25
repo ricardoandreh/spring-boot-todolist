@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Component
 public class FilterTaskAuth extends OncePerRequestFilter {
@@ -37,7 +38,14 @@ public class FilterTaskAuth extends OncePerRequestFilter {
 
         String username = this.jwtService.validateToken(jwt);
 
-        UserDetails user = this.userRepository.findByUsername(username).get();
+        Optional<UserDetails> userO = this.userRepository.findByUsername(username);
+
+        if (userO.isEmpty()) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        UserDetails user = userO.get();
 
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
