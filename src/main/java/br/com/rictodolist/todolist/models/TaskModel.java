@@ -2,6 +2,7 @@ package br.com.rictodolist.todolist.models;
 
 import br.com.rictodolist.todolist.validations.annotations.DateRange;
 import br.com.rictodolist.todolist.validations.annotations.FutureDate;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -57,6 +58,7 @@ public class TaskModel {
 
     @NotNull
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private UserModel user;
 }

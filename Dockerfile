@@ -20,4 +20,4 @@ USER nonroot:nonroot
 
 ENV JDK_JAVA_OPTIONS="-Xms256m -Xmx512m"
 
-ENTRYPOINT ["java", "-jar", "app.jar", "--server.port=10000"]
+ENTRYPOINT ["java", "-jar", "app.jar"]

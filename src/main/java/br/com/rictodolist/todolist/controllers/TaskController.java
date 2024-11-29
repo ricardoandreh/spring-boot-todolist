@@ -1,5 +1,6 @@
 package br.com.rictodolist.todolist.controllers;
 
+import br.com.rictodolist.todolist.dtos.task.TaskPaginationDTO;
 import br.com.rictodolist.todolist.dtos.task.TaskRequestDTO;
 import br.com.rictodolist.todolist.dtos.task.TaskResponseDTO;
 import br.com.rictodolist.todolist.dtos.task.TaskUpdateDTO;
@@ -8,6 +9,9 @@ import br.com.rictodolist.todolist.services.TaskService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,10 +31,8 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<TaskResponseDTO> create(@Valid @RequestBody TaskRequestDTO taskRequestDto, HttpServletRequest request) {
-        UUID idUser = (UUID) request.getAttribute("idUser");
-
         TaskModel task = this.taskService.create(taskRequestDto);
 
         TaskResponseDTO taskResponseDto = new TaskResponseDTO(
@@ -41,14 +43,14 @@ public class TaskController {
                 task.getEndAt(),
                 task.getPriority(),
                 task.getCreatedAt(),
-                linkTo(methodOn(TaskController.class).listOne(request, task.getId())).withSelfRel()
+                linkTo(methodOn(TaskController.class).listOne(task.getId())).withSelfRel()
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(taskResponseDto);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TaskResponseDTO> listOne(HttpServletRequest request, @PathVariable(value = "id") UUID id) {
+    public ResponseEntity<TaskResponseDTO> listOne(@PathVariable(value = "id") UUID id) {
         TaskModel task = this.taskService.getOne(id);
 
         TaskResponseDTO taskResponseDto = new TaskResponseDTO(
@@ -59,15 +61,22 @@ public class TaskController {
                 task.getEndAt(),
                 task.getPriority(),
                 task.getCreatedAt(),
-                linkTo(methodOn(TaskController.class).listAll(request)).withRel("Tasks")
+                linkTo(methodOn(TaskController.class).listAll(0, 5, "id", true)).withRel("Tasks")
         );
 
         return ResponseEntity.status(HttpStatus.OK).body(taskResponseDto);
     }
 
-    @GetMapping("/")
-    public List<TaskResponseDTO> listAll(HttpServletRequest request) {
-        List<TaskModel> tasks = this.taskService.getAll();
+    @GetMapping
+    public ResponseEntity<TaskPaginationDTO> listAll(@RequestParam(defaultValue = "0") int page,
+                                                     @RequestParam(defaultValue = "5") int size,
+                                                     @RequestParam(defaultValue = "id") String sortBy,
+                                                     @RequestParam(defaultValue = "true") boolean ascending) {
+
+        Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        List<TaskModel> tasks = this.taskService.getAll(pageable);
 
         List<TaskResponseDTO> taskResponseDtos = new ArrayList<>();
 
@@ -80,11 +89,18 @@ public class TaskController {
                     task.getEndAt(),
                     task.getPriority(),
                     task.getCreatedAt(),
-                    linkTo(methodOn(TaskController.class).listOne(request, task.getId())).withSelfRel())
+                    linkTo(methodOn(TaskController.class).listOne(task.getId())).withSelfRel())
             );
         }
 
-        return taskResponseDtos;
+        TaskPaginationDTO taskPaginationDTO = new TaskPaginationDTO(
+                taskResponseDtos.size(),
+                page == 0 ? null : linkTo(methodOn(TaskController.class).listAll(page - 1, 5, "id", true)).withRel("Tasks").getHref(),
+                page * size >= taskResponseDtos.size() ? null : linkTo(methodOn(TaskController.class).listAll(page + 1, 5, "id", true)).withRel("Tasks").getHref(),
+                taskResponseDtos
+        );
+
+        return ResponseEntity.status(HttpStatus.OK).body(taskPaginationDTO);
     }
 
     @PutMapping("/{id}")
@@ -99,7 +115,7 @@ public class TaskController {
                 taskUpdated.getEndAt(),
                 taskUpdated.getPriority(),
                 taskUpdated.getCreatedAt(),
-                linkTo(methodOn(TaskController.class).listOne(request, taskUpdated.getId())).withSelfRel()
+                linkTo(methodOn(TaskController.class).listOne(taskUpdated.getId())).withSelfRel()
         );
 
         return ResponseEntity.status(HttpStatus.OK).body(taskResponseDto);
@@ -117,7 +133,7 @@ public class TaskController {
                 taskDeleted.getEndAt(),
                 taskDeleted.getPriority(),
                 taskDeleted.getCreatedAt(),
-                linkTo(methodOn(TaskController.class).listOne(request, taskDeleted.getId())).withSelfRel()
+                linkTo(methodOn(TaskController.class).listOne(taskDeleted.getId())).withSelfRel()
         );
 
         return ResponseEntity.status(HttpStatus.OK).body(taskResponseDto);

@@ -32,9 +32,9 @@ public class SecurityFilter {
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/tasks/").hasAuthority(Permission.READ_ALL_TASKS.name())
+                        .requestMatchers(HttpMethod.GET, "/tasks").hasAuthority(Permission.READ_ALL_TASKS.name())
                         .requestMatchers(HttpMethod.GET, "/tasks/{id}").hasAuthority(Permission.READ_ONE_TASK.name())
-                        .requestMatchers(HttpMethod.POST, "/tasks/").hasAuthority(Permission.CREATE_TASK.name())
+                        .requestMatchers(HttpMethod.POST, "/tasks").hasAuthority(Permission.CREATE_TASK.name())
                         .requestMatchers(HttpMethod.PUT, "/tasks/{id}").hasAuthority(Permission.UPDATE_TASK.name())
                         .requestMatchers(HttpMethod.DELETE, "/tasks/{id}").hasAuthority(Permission.DELETE_TASK.name())
 
