@@ -1,11 +1,11 @@
 package br.com.rictodolist.todolist.config.filter;
 
 import br.com.rictodolist.todolist.config.security.Permission;
+import br.com.rictodolist.todolist.config.security.SecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -18,17 +18,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityFilter {
 
     @Autowired
-    private AuthenticationProvider authenticationProvider;
+    private FilterTaskAuth filterTaskAuth;
 
     @Autowired
-    private FilterTaskAuth filterTaskAuth;
+    private SecurityConfig securityConfig;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sessionMangConfig -> sessionMangConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(this.authenticationProvider)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()

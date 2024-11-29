@@ -2,9 +2,9 @@ package br.com.rictodolist.todolist.models;
 
 import br.com.rictodolist.todolist.config.security.Role;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,7 +37,7 @@ public class UserModel implements UserDetails {
     @NotBlank
     private String username;
 
-    @Max(value = 30, message = "O nome deve possuir no máximo 30 caracteres")
+    @Size(max = 30, message = "O nome deve possuir no máximo 30 caracteres")
     private String name;
 
     @NotNull

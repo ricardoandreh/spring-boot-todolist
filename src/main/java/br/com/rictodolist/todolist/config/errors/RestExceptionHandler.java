@@ -3,6 +3,7 @@ package br.com.rictodolist.todolist.config.errors;
 import br.com.rictodolist.todolist.exceptions.AccessDeniedException;
 import br.com.rictodolist.todolist.exceptions.TaskNotFoundException;
 import br.com.rictodolist.todolist.exceptions.UserAlreadyExistException;
+import br.com.rictodolist.todolist.exceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -59,6 +60,13 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(UserAlreadyExistException.class)
     public ResponseEntity<RestExceptionMessage> userAlreadyExistHandler(UserAlreadyExistException e) {
+        RestExceptionMessage threatResponse = new RestExceptionMessage(HttpStatus.BAD_REQUEST, e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(threatResponse);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<RestExceptionMessage> userNotFoundException(UserNotFoundException e) {
         RestExceptionMessage threatResponse = new RestExceptionMessage(HttpStatus.BAD_REQUEST, e.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(threatResponse);
