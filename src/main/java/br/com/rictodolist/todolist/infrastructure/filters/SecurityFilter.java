@@ -1,7 +1,7 @@
-package br.com.rictodolist.todolist.config.filters;
+package br.com.rictodolist.todolist.infrastructure.filters;
 
-import br.com.rictodolist.todolist.config.security.Permission;
-import br.com.rictodolist.todolist.config.security.SecurityConfig;
+import br.com.rictodolist.todolist.infrastructure.security.Permission;
+import br.com.rictodolist.todolist.infrastructure.security.SecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

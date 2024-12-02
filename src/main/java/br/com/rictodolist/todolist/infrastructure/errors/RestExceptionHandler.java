@@ -1,4 +1,4 @@
-package br.com.rictodolist.todolist.config.errors;
+package br.com.rictodolist.todolist.infrastructure.errors;
 
 import br.com.rictodolist.todolist.exceptions.AccessDeniedException;
 import br.com.rictodolist.todolist.exceptions.TaskNotFoundException;

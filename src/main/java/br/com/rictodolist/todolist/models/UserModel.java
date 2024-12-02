@@ -1,6 +1,6 @@
 package br.com.rictodolist.todolist.models;
 
-import br.com.rictodolist.todolist.config.security.Role;
+import br.com.rictodolist.todolist.infrastructure.security.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
