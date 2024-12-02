@@ -11,13 +11,13 @@ import br.com.rictodolist.todolist.repositories.IUserRepository;
 import br.com.rictodolist.todolist.utils.Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -54,7 +54,7 @@ public class TaskService {
         return task;
     }
 
-    public List<TaskModel> getAll(Pageable pageable) {
+    public Page<TaskModel> getAll(Pageable pageable) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         return this.taskRepository.findByUserUsername(username, pageable);

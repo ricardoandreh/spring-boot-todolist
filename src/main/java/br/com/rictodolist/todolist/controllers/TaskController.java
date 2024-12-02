@@ -9,6 +9,7 @@ import br.com.rictodolist.todolist.services.TaskService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -16,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -76,27 +76,29 @@ public class TaskController {
         Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        List<TaskModel> tasks = this.taskService.getAll(pageable);
+        Page<TaskModel> tasks = this.taskService.getAll(pageable);
 
-        List<TaskResponseDTO> taskResponseDtos = new ArrayList<>();
 
-        for (TaskModel task : tasks) {
-            taskResponseDtos.add(new TaskResponseDTO(
-                    task.getId(),
-                    task.getTitle(),
-                    task.getDescription(),
-                    task.getStartAt(),
-                    task.getEndAt(),
-                    task.getPriority(),
-                    task.getCreatedAt(),
-                    linkTo(methodOn(TaskController.class).listOne(task.getId())).withSelfRel())
-            );
-        }
+        List<TaskResponseDTO> taskResponseDtos = tasks.stream()
+                .map(task -> new TaskResponseDTO(
+                        task.getId(),
+                        task.getTitle(),
+                        task.getDescription(),
+                        task.getStartAt(),
+                        task.getEndAt(),
+                        task.getPriority(),
+                        task.getCreatedAt(),
+                        linkTo(methodOn(TaskController.class).listOne(task.getId())).withSelfRel()
+                ))
+                .toList();
 
         TaskPaginationDTO taskPaginationDTO = new TaskPaginationDTO(
-                taskResponseDtos.size(),
-                page == 0 ? null : linkTo(methodOn(TaskController.class).listAll(page - 1, 5, "id", true)).withRel("Tasks").getHref(),
-                page * size >= taskResponseDtos.size() ? null : linkTo(methodOn(TaskController.class).listAll(page + 1, 5, "id", true)).withRel("Tasks").getHref(),
+                tasks.getTotalElements(),
+                tasks.getTotalPages(),
+                page,
+                tasks.getSize(),
+                tasks.hasNext() ? linkTo(methodOn(TaskController.class).listAll(page + 1, size, sortBy, ascending)).withRel("next").getHref() : null,
+                tasks.hasPrevious() ? linkTo(methodOn(TaskController.class).listAll(page - 1, size, sortBy, ascending)).withRel("previous").getHref() : null,
                 taskResponseDtos
         );
 

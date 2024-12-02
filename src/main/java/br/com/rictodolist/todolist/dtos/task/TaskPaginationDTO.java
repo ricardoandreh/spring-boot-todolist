@@ -1,11 +1,12 @@
 package br.com.rictodolist.todolist.dtos.task;
 
-import org.springframework.hateoas.Link;
-
 import java.util.List;
 
 public record TaskPaginationDTO(
-        int count,
+        long count,
+        int totalPages,
+        int page,
+        int size,
         String next,
         String previous,
         List<TaskResponseDTO> results) {
