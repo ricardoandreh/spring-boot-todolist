@@ -1,10 +1,10 @@
 package br.com.rictodolist.todolist.services;
 
-import br.com.rictodolist.todolist.infrastructure.security.Role;
+import br.com.rictodolist.todolist.infrastructure.enums.Role;
 import br.com.rictodolist.todolist.dtos.user.LoginResponseDTO;
 import br.com.rictodolist.todolist.dtos.user.UserRequestDTO;
 import br.com.rictodolist.todolist.dtos.user.UserResponseDTO;
-import br.com.rictodolist.todolist.exceptions.UserAlreadyExistException;
+import br.com.rictodolist.todolist.exceptions.UserAlreadyExistsException;
 import br.com.rictodolist.todolist.mappers.UserMapper;
 import br.com.rictodolist.todolist.models.UserModel;
 import br.com.rictodolist.todolist.repositories.IUserRepository;
@@ -35,7 +35,7 @@ public class AuthService {
         this.userRepository
                 .findByUsername(userRequestDto.username())
                 .ifPresent((userDetails) -> {
-                    throw new UserAlreadyExistException();
+                    throw new UserAlreadyExistsException();
                 });
 
         String passwordHashed = new BCryptPasswordEncoder().encode(userRequestDto.password());

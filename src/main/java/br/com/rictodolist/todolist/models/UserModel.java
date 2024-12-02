@@ -1,6 +1,7 @@
 package br.com.rictodolist.todolist.models;
 
-import br.com.rictodolist.todolist.infrastructure.security.Role;
+import br.com.rictodolist.todolist.constants.SecurityConstants;
+import br.com.rictodolist.todolist.infrastructure.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -61,7 +62,7 @@ public class UserModel implements UserDetails {
                 permissionEnum -> new SimpleGrantedAuthority(permissionEnum.name())
         ).collect(Collectors.toList());
 
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + this.role.name()));
+        authorities.add(new SimpleGrantedAuthority(SecurityConstants.ROLE_PREFIX + this.role.name()));
 
         return authorities;
     }

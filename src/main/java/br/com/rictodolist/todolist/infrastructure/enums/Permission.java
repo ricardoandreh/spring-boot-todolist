@@ -1,4 +1,4 @@
-package br.com.rictodolist.todolist.infrastructure.security;
+package br.com.rictodolist.todolist.infrastructure.enums;
 
 public enum Permission {
 

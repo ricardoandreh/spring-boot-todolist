@@ -1,5 +1,6 @@
 package br.com.rictodolist.todolist.infrastructure.filters;
 
+import br.com.rictodolist.todolist.constants.SecurityConstants;
 import br.com.rictodolist.todolist.repositories.IUserRepository;
 import br.com.rictodolist.todolist.services.JwtService;
 import jakarta.servlet.FilterChain;
@@ -56,13 +57,12 @@ public class FilterTaskAuth extends OncePerRequestFilter {
     }
 
     private String recoverToken(HttpServletRequest request) {
-        final String jwtType = "Bearer ";
-        final String authHeader = request.getHeader("Authorization");
+        final String authHeader = request.getHeader(SecurityConstants.AUTH_HEADER);
 
-        if (authHeader == null || !authHeader.startsWith(jwtType)) {
+        if (authHeader == null || !authHeader.startsWith(SecurityConstants.TOKEN_PREFIX)) {
             return null;
         }
 
-        return authHeader.substring(jwtType.length());
+        return authHeader.substring(SecurityConstants.TOKEN_PREFIX.length());
     }
 }

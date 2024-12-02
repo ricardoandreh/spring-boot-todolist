@@ -1,5 +1,6 @@
 package br.com.rictodolist.todolist.services;
 
+import br.com.rictodolist.todolist.constants.SecurityConstants;
 import br.com.rictodolist.todolist.models.UserModel;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -51,6 +52,6 @@ public class JwtService {
     }
 
     private Instant generateExpirationDate() {
-        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
+        return LocalDateTime.now().plusHours(SecurityConstants.JWT_EXPIRATION_TIME).toInstant(ZoneOffset.of("-03:00"));
     }
 }

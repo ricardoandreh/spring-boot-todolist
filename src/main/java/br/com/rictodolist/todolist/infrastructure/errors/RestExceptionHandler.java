@@ -2,7 +2,7 @@ package br.com.rictodolist.todolist.infrastructure.errors;
 
 import br.com.rictodolist.todolist.exceptions.AccessDeniedException;
 import br.com.rictodolist.todolist.exceptions.TaskNotFoundException;
-import br.com.rictodolist.todolist.exceptions.UserAlreadyExistException;
+import br.com.rictodolist.todolist.exceptions.UserAlreadyExistsException;
 import br.com.rictodolist.todolist.exceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,8 +58,8 @@ public class RestExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(threatResponse);
     }
 
-    @ExceptionHandler(UserAlreadyExistException.class)
-    public ResponseEntity<RestExceptionMessage> userAlreadyExistHandler(UserAlreadyExistException e) {
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<RestExceptionMessage> userAlreadyExistHandler(UserAlreadyExistsException e) {
         RestExceptionMessage threatResponse = new RestExceptionMessage(HttpStatus.BAD_REQUEST, e.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(threatResponse);

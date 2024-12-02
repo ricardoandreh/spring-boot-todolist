@@ -1,8 +1,8 @@
 package br.com.rictodolist.todolist.services;
 
-import br.com.rictodolist.todolist.infrastructure.security.Role;
+import br.com.rictodolist.todolist.infrastructure.enums.Role;
 import br.com.rictodolist.todolist.dtos.user.UserRequestDTO;
-import br.com.rictodolist.todolist.exceptions.UserAlreadyExistException;
+import br.com.rictodolist.todolist.exceptions.UserAlreadyExistsException;
 import br.com.rictodolist.todolist.models.UserModel;
 import br.com.rictodolist.todolist.repositories.IUserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -79,7 +79,7 @@ class AuthServiceTest {
 
         when(this.userRepository.findByUsername(userRequestDto.username())).thenReturn(Optional.of(existingUser));
 
-        assertThrows(UserAlreadyExistException.class, () -> this.authService.register(userRequestDto));
+        assertThrows(UserAlreadyExistsException.class, () -> this.authService.register(userRequestDto));
 
         verify(this.userRepository, times(1)).findByUsername(userRequestDto.username());
         verify(this.userRepository, never()).save(any(UserModel.class));
