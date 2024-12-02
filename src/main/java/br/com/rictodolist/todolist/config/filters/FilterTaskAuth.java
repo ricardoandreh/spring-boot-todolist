@@ -1,4 +1,4 @@
-package br.com.rictodolist.todolist.config.filter;
+package br.com.rictodolist.todolist.config.filters;
 
 import br.com.rictodolist.todolist.repositories.IUserRepository;
 import br.com.rictodolist.todolist.services.JwtService;

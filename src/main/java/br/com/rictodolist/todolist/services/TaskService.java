@@ -1,9 +1,12 @@
 package br.com.rictodolist.todolist.services;
 
+import br.com.rictodolist.todolist.dtos.task.TaskPaginationDTO;
 import br.com.rictodolist.todolist.dtos.task.TaskRequestDTO;
+import br.com.rictodolist.todolist.dtos.task.TaskResponseDTO;
 import br.com.rictodolist.todolist.dtos.task.TaskUpdateDTO;
 import br.com.rictodolist.todolist.exceptions.AccessDeniedException;
 import br.com.rictodolist.todolist.exceptions.TaskNotFoundException;
+import br.com.rictodolist.todolist.mappers.TaskMapper;
 import br.com.rictodolist.todolist.models.TaskModel;
 import br.com.rictodolist.todolist.models.UserModel;
 import br.com.rictodolist.todolist.repositories.ITaskRepository;
@@ -12,7 +15,9 @@ import br.com.rictodolist.todolist.utils.Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,7 +34,10 @@ public class TaskService {
     @Autowired
     private IUserRepository userRepository;
 
-    public TaskModel create(TaskRequestDTO taskRequestDto) {
+    @Autowired
+    private TaskMapper taskMapper;
+
+    public TaskResponseDTO create(TaskRequestDTO taskRequestDto) {
         TaskModel taskModel = new TaskModel();
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -39,10 +47,12 @@ public class TaskService {
         BeanUtils.copyProperties(taskRequestDto, taskModel);
         taskModel.setUser((UserModel) user);
 
-        return this.taskRepository.save(taskModel);
+        TaskModel taskCreated = this.taskRepository.save(taskModel);
+
+        return this.taskMapper.toDTO(taskCreated);
     }
 
-    public TaskModel getOne(UUID id) {
+    public TaskResponseDTO getOne(UUID id) {
         TaskModel task = this.taskRepository.findById(id).orElseThrow(TaskNotFoundException::new);
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -51,16 +61,21 @@ public class TaskService {
             throw new AccessDeniedException("Usuário não tem permissão para visualizar essa tarefa");
         }
 
-        return task;
+        return this.taskMapper.toDTO(task);
     }
 
-    public Page<TaskModel> getAll(Pageable pageable) {
+    public TaskPaginationDTO getAll(int page, int size, String sortBy, boolean ascending) {
+        Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        return this.taskRepository.findByUserUsername(username, pageable);
+        Page<TaskModel> tasks = this.taskRepository.findByUserUsername(username, pageable);
+
+        return this.taskMapper.toPaginationDTO(tasks, pageable, sortBy, ascending);
     }
 
-    public TaskModel update(TaskUpdateDTO taskUpdateDto, UUID id) {
+    public TaskResponseDTO update(TaskUpdateDTO taskUpdateDto, UUID id) {
         TaskModel task = this.taskRepository.findById(id).orElseThrow(TaskNotFoundException::new);
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -71,10 +86,12 @@ public class TaskService {
 
         Utils.copyNonNullProperties(taskUpdateDto, task);
 
-        return this.taskRepository.save(task);
+        TaskModel taskCreated = this.taskRepository.save(task);
+
+        return this.taskMapper.toDTO(taskCreated);
     }
 
-    public TaskModel delete(UUID id) {
+    public TaskResponseDTO delete(UUID id) {
         TaskModel task = this.taskRepository.findById(id).orElseThrow(TaskNotFoundException::new);
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -85,6 +102,6 @@ public class TaskService {
 
         this.taskRepository.delete(task);
 
-        return task;
+        return this.taskMapper.toDTO(task);
     }
 }

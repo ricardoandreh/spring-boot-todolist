@@ -3,12 +3,10 @@ package br.com.rictodolist.todolist.controllers;
 import br.com.rictodolist.todolist.dtos.user.LoginResponseDTO;
 import br.com.rictodolist.todolist.dtos.user.UserRequestDTO;
 import br.com.rictodolist.todolist.dtos.user.UserResponseDTO;
-import br.com.rictodolist.todolist.models.UserModel;
 import br.com.rictodolist.todolist.services.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,23 +18,18 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDTO> register(@Valid @RequestBody UserRequestDTO user) {
-        UserModel userCreated = this.authService.register(user);
+    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseBody
+    public UserResponseDTO register(@RequestBody @Valid UserRequestDTO user) {
 
-        UserResponseDTO userResponseDto = new UserResponseDTO(
-                userCreated.getId(),
-                userCreated.getUsername(),
-                userCreated.getName(),
-                userCreated.getCreatedAt()
-        );
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDto);
+        return this.authService.register(user);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody UserRequestDTO user) {
-        String token = this.authService.login(user);
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public LoginResponseDTO login(@RequestBody @Valid UserRequestDTO user) {
 
-        return ResponseEntity.status(HttpStatus.OK).body(new LoginResponseDTO(token));
+        return this.authService.login(user);
     }
 }

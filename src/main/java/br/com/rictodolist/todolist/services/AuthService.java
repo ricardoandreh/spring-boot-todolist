@@ -1,14 +1,18 @@
 package br.com.rictodolist.todolist.services;
 
 import br.com.rictodolist.todolist.config.security.Role;
+import br.com.rictodolist.todolist.dtos.user.LoginResponseDTO;
 import br.com.rictodolist.todolist.dtos.user.UserRequestDTO;
+import br.com.rictodolist.todolist.dtos.user.UserResponseDTO;
 import br.com.rictodolist.todolist.exceptions.UserAlreadyExistException;
+import br.com.rictodolist.todolist.mappers.UserMapper;
 import br.com.rictodolist.todolist.models.UserModel;
 import br.com.rictodolist.todolist.repositories.IUserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +28,10 @@ public class AuthService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    public UserModel register(UserRequestDTO userRequestDto) {
+    @Autowired
+    private UserMapper userMapper;
+
+    public UserResponseDTO register(UserRequestDTO userRequestDto) {
         this.userRepository
                 .findByUsername(userRequestDto.username())
                 .ifPresent((userDetails) -> {
@@ -39,15 +46,19 @@ public class AuthService {
         userModel.setPassword(passwordHashed);
         userModel.setRole(Role.USER);
 
-        return this.userRepository.save(userModel);
+        UserModel userCreated = this.userRepository.save(userModel);
+
+        return this.userMapper.toDTO(userCreated);
     }
 
-    public String login(UserRequestDTO userRequestDTO) {
+    public LoginResponseDTO login(UserRequestDTO userRequestDTO) {
         UsernamePasswordAuthenticationToken usernamePassword =
                 new UsernamePasswordAuthenticationToken(userRequestDTO.username(), userRequestDTO.password());
 
-        var auth = this.authenticationManager.authenticate(usernamePassword);
+        Authentication auth = this.authenticationManager.authenticate(usernamePassword);
 
-        return this.jwtService.generateToken((UserModel) auth.getPrincipal());
+        String token = this.jwtService.generateToken((UserModel) auth.getPrincipal());
+
+        return new LoginResponseDTO(token);
     }
 }
