@@ -37,6 +37,8 @@ public class TaskController {
     }
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
     public TaskPaginationDTO listAll(@RequestParam(defaultValue = "0") int page,
                                      @RequestParam(defaultValue = "5") int size,
                                      @RequestParam(defaultValue = "id") String sortBy,

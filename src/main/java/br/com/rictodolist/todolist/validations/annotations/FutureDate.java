@@ -1,5 +1,6 @@
 package br.com.rictodolist.todolist.validations.annotations;
 
+import br.com.rictodolist.todolist.constants.ErrorMessages;
 import br.com.rictodolist.todolist.validations.validators.FutureDateValidator;
 import jakarta.validation.Constraint;
 import org.springframework.context.PayloadApplicationEvent;
@@ -14,7 +15,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = FutureDateValidator.class)
 public @interface FutureDate {
 
-    String message() default "A data de início / data de término deve ser maior do que a data atual";
+    String message() default ErrorMessages.FUTURE_DATE;
 
     Class<?>[] groups() default {};
 

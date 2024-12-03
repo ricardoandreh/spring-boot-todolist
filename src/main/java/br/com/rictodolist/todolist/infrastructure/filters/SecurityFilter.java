@@ -38,6 +38,12 @@ public class SecurityFilter {
                         .requestMatchers(HttpMethod.PUT, "/tasks/{id}").hasAuthority(Permission.UPDATE_TASK.name())
                         .requestMatchers(HttpMethod.DELETE, "/tasks/{id}").hasAuthority(Permission.DELETE_TASK.name())
 
+                        // Dev settings
+                        .requestMatchers(HttpMethod.GET, "/docs/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/h2-console/**").permitAll()
+
                         .anyRequest().denyAll()
                 )
                 .addFilterBefore(this.filterTaskAuth, UsernamePasswordAuthenticationFilter.class)

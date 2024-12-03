@@ -1,5 +1,6 @@
 package br.com.rictodolist.todolist.validations.annotations;
 
+import br.com.rictodolist.todolist.constants.ErrorMessages;
 import br.com.rictodolist.todolist.validations.validators.DateRangeValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -14,7 +15,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = DateRangeValidator.class)
 public @interface DateRange {
 
-    String message() default "A data de início deve ser menor que a data de término.";
+    String message() default ErrorMessages.DATE_RANGE;
 
     Class<?>[] groups() default {};
 

@@ -5,4 +5,7 @@ public class ErrorMessages {
     public static final String USER_ALREADY_EXISTS = "Usuário já existe";
     public static final String TASK_NOT_FOUND = "Tarefa não encontrada";
     public static final String ACCESS_DENIED = "Usuário não possui permissão";
+
+    public static final String DATE_RANGE = "A data de início deve ser menor que a data de término";
+    public static final String FUTURE_DATE = "A data de início / data de término deve ser maior do que a data atual";
 }
