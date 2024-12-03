@@ -31,6 +31,7 @@ public class SecurityFilter {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/refresh").permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/tasks").hasAuthority(Permission.READ_ALL_TASKS.name())
                         .requestMatchers(HttpMethod.GET, "/tasks/{id}").hasAuthority(Permission.READ_ONE_TASK.name())

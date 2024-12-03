@@ -17,14 +17,28 @@ public class JwtService {
     @Value("${api.security.token.secret}")
     private String secret;
 
-    public String generateToken(UserModel user) {
+    public String generateAccessToken(UserModel user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
 
             return JWT.create()
                     .withIssuer("auth-api")
                     .withSubject(user.getUsername())
-                    .withExpiresAt(generateExpirationDate())
+                    .withExpiresAt(generateAccessExpirationDate())
+                    .sign(algorithm);
+        } catch (JWTCreationException e) {
+            throw new RuntimeException("Error while generating token", e);
+        }
+    }
+
+    public String generateRefreshToken(UserModel user) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+
+            return JWT.create()
+                    .withIssuer("auth-api")
+                    .withSubject(user.getUsername())
+                    .withExpiresAt(generateRefreshTokenExpirationDate())
                     .sign(algorithm);
         } catch (JWTCreationException e) {
             throw new RuntimeException("Error while generating token", e);
@@ -45,8 +59,13 @@ public class JwtService {
         }
     }
 
-    private Instant generateExpirationDate() {
+    private Instant generateAccessExpirationDate() {
 
-        return Instant.now().plusMillis(SecurityConstants.JWT_EXPIRATION_TIME);
+        return Instant.now().plusMillis(SecurityConstants.JWT_ACCESS_EXPIRATION_TIME);
+    }
+
+    private Instant generateRefreshTokenExpirationDate() {
+
+        return Instant.now().plusMillis(SecurityConstants.JWT_REFRESH_TOKEN_EXPIRATION_TIME);
     }
 }
