@@ -1,5 +1,6 @@
 package br.com.rictodolist.todolist.models;
 
+import br.com.rictodolist.todolist.constants.ErrorMessages;
 import br.com.rictodolist.todolist.validations.annotations.DateRange;
 import br.com.rictodolist.todolist.validations.annotations.FutureDate;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -32,12 +33,10 @@ public class TaskModel {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @NotNull
     @NotBlank
-    @Size(max = 50, message = "O título deve conter no máximo 50 caracteres")
+    @Size(max = 50, message = ErrorMessages.MAXIMUM_TITLE_SIZE)
     private String title;
 
-    @NotNull
     @NotBlank
     private String description;
 
@@ -49,7 +48,6 @@ public class TaskModel {
     @FutureDate
     private LocalDateTime endAt;
 
-    @NotNull
     @NotBlank
     private String priority;
 

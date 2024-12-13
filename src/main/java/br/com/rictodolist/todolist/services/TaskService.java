@@ -86,6 +86,7 @@ public class TaskService {
         }
 
         Utils.copyNonNullProperties(taskUpdateDto, task);
+        System.out.println(task);
 
         TaskModel taskCreated = this.taskRepository.save(task);
 

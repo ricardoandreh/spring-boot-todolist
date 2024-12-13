@@ -44,7 +44,7 @@ public class TaskController {
         return this.taskService.getAll(page, size, sortBy, ascending);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public TaskResponseDTO update(@RequestBody @Valid TaskUpdateDTO taskUpdateDto, @PathVariable("id") UUID id) {
 

@@ -1,5 +1,6 @@
 package br.com.rictodolist.todolist.models;
 
+import br.com.rictodolist.todolist.constants.ErrorMessages;
 import br.com.rictodolist.todolist.constants.SecurityConstants;
 import br.com.rictodolist.todolist.infrastructure.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -39,7 +40,7 @@ public class UserModel implements UserDetails {
     @NotBlank
     private String username;
 
-    @Size(max = 30, message = "O nome deve possuir no máximo 30 caracteres")
+    @Size(max = 30, message = ErrorMessages.MAXIMUM_NAME_SIZE)
     private String name;
 
     @NotNull

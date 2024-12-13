@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
 
 @DateRange(startDateField = "startAt", endDateField = "endAt")
 public record TaskRequestDTO(
-        @NotNull @NotBlank @Size(max = 50, message = "O título deve conter no máximo 50 caracteres") String title,
-        @NotNull @NotBlank String description,
+        @NotBlank @Size(max = 50, message = "O título deve conter no máximo 50 caracteres") String title,
+        @NotBlank String description,
         @NotNull @FutureDate LocalDateTime startAt,
         @NotNull @FutureDate LocalDateTime endAt,
-        @NotNull @NotBlank String priority) {
+        @NotBlank String priority) {
 }

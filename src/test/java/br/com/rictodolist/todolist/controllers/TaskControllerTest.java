@@ -176,7 +176,7 @@ class TaskControllerTest {
         when(this.taskService.update(any(TaskUpdateDTO.class), any(UUID.class)))
                 .thenReturn(this.baseTaskUpdated);
 
-        this.mockMvc.perform(put("/tasks/" + this.baseTaskUpdated.id())
+        this.mockMvc.perform(patch("/tasks/" + this.baseTaskUpdated.id())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                     {
@@ -190,6 +190,27 @@ class TaskControllerTest {
                 .andExpect(jsonPath("$.title").value("Task Updated"))
                 .andExpect(jsonPath("$.description").value("New description"))
                 .andExpect(jsonPath("$.priority").value("ALTA"));
+    }
+
+    @Test
+    @DisplayName("Should throw MethodArgumentNotValidException when description is blank validation fails")
+    @WithMockUser(authorities = {"UPDATE_TASK"})
+    void updateTaskAssertBlank() throws Exception {
+        when(this.taskService.update(any(TaskUpdateDTO.class), any(UUID.class)))
+                .thenReturn(this.baseTaskUpdated);
+
+        this.mockMvc.perform(patch("/tasks/" + this.baseTaskUpdated.id())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                    {
+                                        "title": "Task Updated2",
+                                        "description": ""
+                                    }
+                                """))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.description").value("must not be blank"))
+                .andExpect(jsonPath("$.priority").doesNotExist());
     }
 
     @Test
