@@ -7,8 +7,4 @@ public class TaskNotFoundException extends RuntimeException {
     public TaskNotFoundException() {
         super(ErrorMessages.TASK_NOT_FOUND);
     }
-
-    public TaskNotFoundException(String message) {
-        super(message);
-    }
 }

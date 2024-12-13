@@ -23,8 +23,8 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 
-        provider.setUserDetailsService(userDetailsService());
-        provider.setPasswordEncoder(passwordEncoder());
+        provider.setUserDetailsService(this.userDetailsService());
+        provider.setPasswordEncoder(this.passwordEncoder());
 
         return new ProviderManager(provider);
     }

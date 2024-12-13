@@ -1,5 +1,6 @@
 package br.com.rictodolist.todolist.validations.validators;
 
+import br.com.rictodolist.todolist.constants.ErrorMessages;
 import br.com.rictodolist.todolist.validations.annotations.DateRange;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -25,9 +26,9 @@ public class DateRangeValidator implements ConstraintValidator<DateRange, Object
         }
 
         try {
-            Class<?> clazz = value.getClass();
-            Field startDate = clazz.getDeclaredField(startDateField);
-            Field endDate = clazz.getDeclaredField(endDateField);
+            Class<?> cls = value.getClass();
+            Field startDate = cls.getDeclaredField(startDateField);
+            Field endDate = cls.getDeclaredField(endDateField);
 
             startDate.setAccessible(true);
             endDate.setAccessible(true);
@@ -44,7 +45,7 @@ public class DateRangeValidator implements ConstraintValidator<DateRange, Object
 
                 if (!isValid) {
                     context.disableDefaultConstraintViolation();
-                    context.buildConstraintViolationWithTemplate("A data de término deve ser maior ou igual à data de início.")
+                    context.buildConstraintViolationWithTemplate(ErrorMessages.DATE_RANGE)
                             .addPropertyNode("endAt")
                             .addConstraintViolation();
                 }

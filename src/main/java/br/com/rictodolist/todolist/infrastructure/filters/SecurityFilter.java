@@ -1,7 +1,6 @@
 package br.com.rictodolist.todolist.infrastructure.filters;
 
 import br.com.rictodolist.todolist.infrastructure.enums.Permission;
-import br.com.rictodolist.todolist.infrastructure.security.SecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,15 +19,15 @@ public class SecurityFilter {
     @Autowired
     private FilterTaskAuth filterTaskAuth;
 
-    @Autowired
-    private SecurityConfig securityConfig;
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(sessionMangConfig -> sessionMangConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(sessionMangConfig ->
+                        sessionMangConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.GET, "/actuator/health").permitAll()
+
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/refresh").permitAll()
@@ -40,7 +39,7 @@ public class SecurityFilter {
                         .requestMatchers(HttpMethod.DELETE, "/tasks/{id}").hasAuthority(Permission.DELETE_TASK.name())
 
                         // Dev settings
-                        .requestMatchers(HttpMethod.GET, "/docs/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/docs").permitAll()
                         .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/h2-console/**").permitAll()

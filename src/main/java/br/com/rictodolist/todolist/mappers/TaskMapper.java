@@ -21,6 +21,7 @@ public class TaskMapper {
                 .buildAndExpand(model.getId())
                 .toUriString();
 
+
         return new TaskResponseDTO(
                 model.getId(),
                 model.getTitle(),

@@ -21,8 +21,4 @@ public enum Role {
     Role(List<Permission> permissions) {
         this.permissions = permissions;
     }
-
-    public void setPermissions(List<Permission> permissions) {
-        this.permissions = permissions;
-    }
 }
