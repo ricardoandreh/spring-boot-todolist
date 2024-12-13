@@ -18,11 +18,15 @@ public class JwtService {
     private String secret;
 
     public String generateAccessToken(UserModel user) {
+        if (this.secret == null || this.secret.isEmpty()) {
+            throw new IllegalArgumentException("The Secret cannot be null or empty");
+        }
+
         try {
-            Algorithm algorithm = Algorithm.HMAC256(secret);
+            Algorithm algorithm = Algorithm.HMAC256(this.secret);
 
             return JWT.create()
-                    .withIssuer("auth-api")
+                    .withIssuer("auth0")
                     .withSubject(user.getUsername())
                     .withExpiresAt(generateAccessExpirationDate())
                     .sign(algorithm);
@@ -32,11 +36,15 @@ public class JwtService {
     }
 
     public String generateRefreshToken(UserModel user) {
+        if (this.secret == null || this.secret.isEmpty()) {
+            throw new IllegalArgumentException("The Secret cannot be null or empty");
+        }
+
         try {
-            Algorithm algorithm = Algorithm.HMAC256(secret);
+            Algorithm algorithm = Algorithm.HMAC256(this.secret);
 
             return JWT.create()
-                    .withIssuer("auth-api")
+                    .withIssuer("auth0")
                     .withSubject(user.getUsername())
                     .withExpiresAt(generateRefreshTokenExpirationDate())
                     .sign(algorithm);
@@ -47,10 +55,10 @@ public class JwtService {
 
     public String validateToken(String token) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(secret);
+            Algorithm algorithm = Algorithm.HMAC256(this.secret);
 
             return JWT.require(algorithm)
-                    .withIssuer("auth-api")
+                    .withIssuer("auth0")
                     .build()
                     .verify(token)
                     .getSubject();

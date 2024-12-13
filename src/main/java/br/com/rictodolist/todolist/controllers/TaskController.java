@@ -22,7 +22,6 @@ public class TaskController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     public TaskResponseDTO create(@RequestBody @Valid TaskRequestDTO taskRequestDto) {
 
         return this.taskService.create(taskRequestDto);
@@ -30,18 +29,16 @@ public class TaskController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public TaskResponseDTO listOne(@PathVariable(value = "id") UUID id) {
+    public TaskResponseDTO listOne(@PathVariable("id") UUID id) {
 
         return this.taskService.getOne(id);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public TaskPaginationDTO listAll(@RequestParam(defaultValue = "0") int page,
                                      @RequestParam(defaultValue = "5") int size,
-                                     @RequestParam(defaultValue = "id") String sortBy,
+                                     @RequestParam(defaultValue = "createdAt") String sortBy,
                                      @RequestParam(defaultValue = "true") boolean ascending) {
 
         return this.taskService.getAll(page, size, sortBy, ascending);
@@ -49,16 +46,14 @@ public class TaskController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public TaskResponseDTO update(@RequestBody @Valid TaskUpdateDTO taskUpdateDto, @PathVariable(value = "id") UUID id) {
+    public TaskResponseDTO update(@RequestBody @Valid TaskUpdateDTO taskUpdateDto, @PathVariable("id") UUID id) {
 
         return this.taskService.update(taskUpdateDto, id);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public TaskResponseDTO delete(@PathVariable(value = "id") UUID id) {
+    public TaskResponseDTO delete(@PathVariable("id") UUID id) {
 
         return this.taskService.delete(id);
     }

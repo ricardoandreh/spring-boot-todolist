@@ -3,7 +3,8 @@ package br.com.rictodolist.todolist.controllers;
 import br.com.rictodolist.todolist.dtos.jwt.AccessResponseDTO;
 import br.com.rictodolist.todolist.dtos.jwt.LoginResponseDTO;
 import br.com.rictodolist.todolist.dtos.jwt.RefreshRequestDTO;
-import br.com.rictodolist.todolist.dtos.user.*;
+import br.com.rictodolist.todolist.dtos.user.UserRequestDTO;
+import br.com.rictodolist.todolist.dtos.user.UserResponseDTO;
 import br.com.rictodolist.todolist.services.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,6 @@ public class AuthController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     public UserResponseDTO register(@RequestBody @Valid UserRequestDTO user) {
 
         return this.authService.register(user);
@@ -28,7 +28,6 @@ public class AuthController {
 
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public LoginResponseDTO login(@RequestBody @Valid UserRequestDTO user) {
 
         return this.authService.login(user);
@@ -36,7 +35,6 @@ public class AuthController {
 
     @PostMapping("/refresh")
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public AccessResponseDTO refresh(@RequestBody @Valid RefreshRequestDTO refresh) {
 
         return this.authService.refresh(refresh);

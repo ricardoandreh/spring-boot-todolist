@@ -3,7 +3,8 @@ package br.com.rictodolist.todolist.services;
 import br.com.rictodolist.todolist.dtos.jwt.AccessResponseDTO;
 import br.com.rictodolist.todolist.dtos.jwt.LoginResponseDTO;
 import br.com.rictodolist.todolist.dtos.jwt.RefreshRequestDTO;
-import br.com.rictodolist.todolist.dtos.user.*;
+import br.com.rictodolist.todolist.dtos.user.UserRequestDTO;
+import br.com.rictodolist.todolist.dtos.user.UserResponseDTO;
 import br.com.rictodolist.todolist.exceptions.UserAlreadyExistsException;
 import br.com.rictodolist.todolist.exceptions.UserNotFoundException;
 import br.com.rictodolist.todolist.infrastructure.enums.Role;
@@ -33,6 +34,9 @@ public class AuthService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     public UserResponseDTO register(UserRequestDTO userRequestDto) {
         this.userRepository
                 .findByUsername(userRequestDto.username())
@@ -40,12 +44,12 @@ public class AuthService {
                     throw new UserAlreadyExistsException();
                 });
 
-        String passwordHashed = new BCryptPasswordEncoder().encode(userRequestDto.password());
+        String encodedPassword = this.passwordEncoder.encode(userRequestDto.password());
 
         UserModel userModel = new UserModel();
 
         BeanUtils.copyProperties(userRequestDto, userModel);
-        userModel.setPassword(passwordHashed);
+        userModel.setPassword(encodedPassword);
         userModel.setRole(Role.USER);
 
         UserModel userCreated = this.userRepository.save(userModel);

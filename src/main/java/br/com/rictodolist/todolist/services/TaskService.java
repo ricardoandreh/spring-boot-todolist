@@ -53,7 +53,8 @@ public class TaskService {
     }
 
     public TaskResponseDTO getOne(UUID id) {
-        TaskModel task = this.taskRepository.findById(id).orElseThrow(TaskNotFoundException::new);
+        TaskModel task = this.taskRepository.findById(id)
+                .orElseThrow(TaskNotFoundException::new);
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -65,8 +66,7 @@ public class TaskService {
     }
 
     public TaskPaginationDTO getAll(int page, int size, String sortBy, boolean ascending) {
-        Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        Pageable pageable = PageRequest.of(page, size, sort);
+        Pageable pageable = this.getPageable(page, size, sortBy, ascending);
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -76,7 +76,8 @@ public class TaskService {
     }
 
     public TaskResponseDTO update(TaskUpdateDTO taskUpdateDto, UUID id) {
-        TaskModel task = this.taskRepository.findById(id).orElseThrow(TaskNotFoundException::new);
+        TaskModel task = this.taskRepository.findById(id)
+                .orElseThrow(TaskNotFoundException::new);
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -92,7 +93,8 @@ public class TaskService {
     }
 
     public TaskResponseDTO delete(UUID id) {
-        TaskModel task = this.taskRepository.findById(id).orElseThrow(TaskNotFoundException::new);
+        TaskModel task = this.taskRepository.findById(id)
+                .orElseThrow(TaskNotFoundException::new);
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -103,5 +105,11 @@ public class TaskService {
         this.taskRepository.delete(task);
 
         return this.taskMapper.toDTO(task);
+    }
+
+    public Pageable getPageable(int page, int size, String sortBy, boolean ascending) {
+        Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+
+        return PageRequest.of(page, size, sort);
     }
 }
