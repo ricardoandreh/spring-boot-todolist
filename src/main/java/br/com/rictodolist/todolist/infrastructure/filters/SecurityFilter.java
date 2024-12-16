@@ -37,6 +37,7 @@ public class SecurityFilter {
                         .requestMatchers(HttpMethod.POST, "/tasks").hasAuthority(Permission.CREATE_TASK.name())
                         .requestMatchers(HttpMethod.PATCH, "/tasks/{id}").hasAuthority(Permission.UPDATE_TASK.name())
                         .requestMatchers(HttpMethod.DELETE, "/tasks/{id}").hasAuthority(Permission.DELETE_TASK.name())
+                        .requestMatchers(HttpMethod.GET, "/tasks/search\\?**").hasAuthority(Permission.SEARCH_TASKS.name())
 
                         // Dev settings
                         .requestMatchers(HttpMethod.GET, "/docs").permitAll()

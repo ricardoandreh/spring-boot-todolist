@@ -108,6 +108,15 @@ public class TaskService {
         return this.taskMapper.toDTO(task);
     }
 
+    public TaskPaginationDTO search(String query, int page, int size, String sortBy, boolean ascending) {
+        Pageable pageable = this.getPageable(page, size, sortBy, ascending);
+
+        Page<TaskModel> tasks = this.taskRepository.findByTitle(query, pageable);
+
+        return this.taskMapper.toPaginationDTO(tasks, pageable, sortBy, ascending);
+    }
+
+
     public Pageable getPageable(int page, int size, String sortBy, boolean ascending) {
         Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
 

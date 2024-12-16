@@ -5,6 +5,7 @@ import br.com.rictodolist.todolist.dtos.task.TaskRequestDTO;
 import br.com.rictodolist.todolist.dtos.task.TaskResponseDTO;
 import br.com.rictodolist.todolist.dtos.task.TaskUpdateDTO;
 import br.com.rictodolist.todolist.exceptions.AccessDeniedException;
+import br.com.rictodolist.todolist.infrastructure.enums.Priority;
 import br.com.rictodolist.todolist.infrastructure.enums.Role;
 import br.com.rictodolist.todolist.mappers.TaskMapper;
 import br.com.rictodolist.todolist.models.TaskModel;
@@ -82,7 +83,7 @@ class TaskServiceTest {
                 "description",
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                "BAIXA",
+                Priority.BAIXA,
                 LocalDateTime.now(),
                 this.baseUser
         );
@@ -112,7 +113,7 @@ class TaskServiceTest {
                         "Description 1",
                         LocalDateTime.now(),
                         LocalDateTime.now().plusHours(1),
-                        "ALTA",
+                        Priority.ALTA,
                         LocalDateTime.now(),
                         this.baseUser
                 ),
@@ -122,7 +123,7 @@ class TaskServiceTest {
                         "Description 2",
                         LocalDateTime.now(),
                         LocalDateTime.now().plusHours(2),
-                        "BAIXA",
+                        Priority.BAIXA,
                         LocalDateTime.now(),
                         this.baseUser
                 ),
@@ -132,7 +133,7 @@ class TaskServiceTest {
                         "Description 3",
                         LocalDateTime.now(),
                         LocalDateTime.now().plusHours(1),
-                        "MEDIA",
+                        Priority.MEDIA,
                         LocalDateTime.now(),
                         this.baseUser
                 )
@@ -349,12 +350,5 @@ class TaskServiceTest {
                 .delete(any(TaskModel.class));
         verify(this.taskMapper, never())
                 .toDTO(any(TaskModel.class));
-    }
-
-
-    @Test
-    @DisplayName("Should validate date range successfully when everything is OK")
-    void dateRangeCase1() {
-
     }
 }

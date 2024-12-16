@@ -6,7 +6,6 @@ import br.com.rictodolist.todolist.infrastructure.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,34 +22,32 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Table
 @Getter
 @Setter
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tb_users")
+@Entity(name = "tb_users")
 public class UserModel implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(unique = true)
-    @NotNull
     @NotBlank
+    @Column(unique = true)
     private String username;
 
     @Size(max = 30, message = ErrorMessages.MAXIMUM_NAME_SIZE)
     private String name;
 
-    @NotNull
     @NotBlank
     private String password;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated
     private Role role;
 
     @JsonIgnore

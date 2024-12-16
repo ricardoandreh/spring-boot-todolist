@@ -57,4 +57,15 @@ public class TaskController {
 
         return this.taskService.delete(id);
     }
+
+    @GetMapping("/search")
+    @ResponseStatus(HttpStatus.OK)
+    public TaskPaginationDTO search(@RequestParam(defaultValue = "") String q,
+                                    @RequestParam(defaultValue = "0") int page,
+                                    @RequestParam(defaultValue = "5") int size,
+                                    @RequestParam(defaultValue = "createdAt") String sortBy,
+                                    @RequestParam(defaultValue = "true") boolean ascending) {
+
+        return this.taskService.search(q, page, size, sortBy, ascending);
+    }
 }

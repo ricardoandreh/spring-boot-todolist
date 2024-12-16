@@ -11,4 +11,6 @@ public enum Permission {
     UPDATE_TASK,
 
     DELETE_TASK,
+
+    SEARCH_TASKS,
 }

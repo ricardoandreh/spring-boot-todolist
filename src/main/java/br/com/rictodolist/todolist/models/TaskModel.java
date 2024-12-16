@@ -1,6 +1,7 @@
 package br.com.rictodolist.todolist.models;
 
 import br.com.rictodolist.todolist.constants.ErrorMessages;
+import br.com.rictodolist.todolist.infrastructure.enums.Priority;
 import br.com.rictodolist.todolist.validations.annotations.DateRange;
 import br.com.rictodolist.todolist.validations.annotations.FutureDate;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,12 +18,12 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Table
 @Getter
 @Setter
-@Entity
+@Entity(name = "tb_tasks")
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tb_tasks")
 @DateRange(
         startDateField = "startAt",
         endDateField = "endAt"
@@ -48,8 +49,9 @@ public class TaskModel {
     @FutureDate
     private LocalDateTime endAt;
 
-    @NotBlank
-    private String priority;
+    @NotNull
+    @Enumerated
+    private Priority priority;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

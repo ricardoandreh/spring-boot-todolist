@@ -1,5 +1,6 @@
 package br.com.rictodolist.todolist.dtos.task;
 
+import br.com.rictodolist.todolist.infrastructure.enums.Priority;
 import br.com.rictodolist.todolist.validations.annotations.DateRange;
 import br.com.rictodolist.todolist.validations.annotations.FutureDate;
 import jakarta.validation.constraints.NotBlank;
@@ -14,5 +15,5 @@ public record TaskRequestDTO(
         @NotBlank String description,
         @NotNull @FutureDate LocalDateTime startAt,
         @NotNull @FutureDate LocalDateTime endAt,
-        @NotBlank String priority) {
+        @NotNull Priority priority) {
 }

@@ -13,10 +13,11 @@ public enum Role {
             Permission.READ_ONE_TASK,
             Permission.CREATE_TASK,
             Permission.UPDATE_TASK,
-            Permission.DELETE_TASK)
+            Permission.DELETE_TASK,
+            Permission.SEARCH_TASKS)
     );
 
-    private List<Permission> permissions;
+    private final List<Permission> permissions;
 
     Role(List<Permission> permissions) {
         this.permissions = permissions;

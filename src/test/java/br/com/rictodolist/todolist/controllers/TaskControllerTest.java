@@ -1,9 +1,11 @@
 package br.com.rictodolist.todolist.controllers;
 
+import br.com.rictodolist.todolist.constants.ErrorMessages;
 import br.com.rictodolist.todolist.dtos.task.TaskPaginationDTO;
 import br.com.rictodolist.todolist.dtos.task.TaskRequestDTO;
 import br.com.rictodolist.todolist.dtos.task.TaskResponseDTO;
 import br.com.rictodolist.todolist.dtos.task.TaskUpdateDTO;
+import br.com.rictodolist.todolist.infrastructure.enums.Priority;
 import br.com.rictodolist.todolist.repositories.IUserRepository;
 import br.com.rictodolist.todolist.services.JwtService;
 import br.com.rictodolist.todolist.services.TaskService;
@@ -57,7 +59,7 @@ class TaskControllerTest {
                 "Description 1",
                 LocalDateTime.now(),
                 LocalDateTime.now().plusHours(1),
-                "ALTA",
+                Priority.ALTA,
                 LocalDateTime.now(),
                 Link.of("/tasks/1", "self")
         );
@@ -67,7 +69,7 @@ class TaskControllerTest {
                 "New description",
                 LocalDateTime.now(),
                 LocalDateTime.now().plusHours(1),
-                "ALTA",
+                Priority.ALTA,
                 LocalDateTime.now(),
                 Link.of("/tasks/1", "self")
         );
@@ -85,7 +87,7 @@ class TaskControllerTest {
                                 "Descrição da tarefa para implementar a feature 1.",
                                 LocalDateTime.now().minusDays(1),
                                 LocalDateTime.now().plusDays(2),
-                                "HIGH",
+                                Priority.ALTA,
                                 LocalDateTime.now().minusDays(2),
                                 Link.of("/tasks/1", "self")
                         ),
@@ -95,7 +97,7 @@ class TaskControllerTest {
                                 "Descrição da tarefa para implementar a feature 2.",
                                 LocalDateTime.now().minusDays(1),
                                 LocalDateTime.now().plusDays(2),
-                                "HIGH",
+                                Priority.ALTA,
                                 LocalDateTime.now().minusDays(2),
                                 Link.of("/tasks/2", "self")
                         ),
@@ -105,7 +107,7 @@ class TaskControllerTest {
                                 "Descrição da tarefa para implementar a feature 3.",
                                 LocalDateTime.now().minusDays(1),
                                 LocalDateTime.now().plusDays(2),
-                                "HIGH",
+                                Priority.ALTA,
                                 LocalDateTime.now().minusDays(2),
                                 Link.of("/tasks/3", "self")
                         )
@@ -226,5 +228,25 @@ class TaskControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.title").value("Task 1"))
                 .andExpect(jsonPath("$.priority").value("ALTA"));
+    }
+
+    @Test
+    @DisplayName("Should validate date range successfully when everything is OK")
+    @WithMockUser(authorities = {"CREATE_TASK"})
+    void dateRangeValidation() throws Exception {
+        this.mockMvc.perform(post("/tasks")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                    {
+                                        "title": "Task 1",
+                                        "description": "Description 1",
+                                        "startAt": "2097-12-17T10:00:00",
+                                        "endAt": "2097-12-16T11:00:00",
+                                        "priority": 0
+                                    }
+                                """))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.endAt").value(ErrorMessages.DATE_RANGE));
     }
 }

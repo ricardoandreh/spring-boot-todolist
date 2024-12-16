@@ -23,14 +23,7 @@ public class RestExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public RestExceptionMessage httpMessageNotReadableHandler(HttpMessageNotReadableException e) {
 
-        return new RestExceptionMessage(HttpStatus.BAD_REQUEST, e.getMostSpecificCause().getMessage());
-    }
-
-    @ExceptionHandler(BadCredentialsException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public RestExceptionMessage badCredentialsHandler(BadCredentialsException e) {
-
-        return new RestExceptionMessage(HttpStatus.BAD_REQUEST, e.getMessage());
+        return new RestExceptionMessage(HttpStatus.BAD_REQUEST.value(), e.getMostSpecificCause().getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -50,31 +43,38 @@ public class RestExceptionHandler {
         return errors;
     }
 
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public RestExceptionMessage badCredentialsHandler(BadCredentialsException e) {
+
+        return new RestExceptionMessage(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+    }
+
     @ExceptionHandler(TaskNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public RestExceptionMessage taskNotFoundHandler(TaskNotFoundException e) {
 
-        return new RestExceptionMessage(HttpStatus.NOT_FOUND, e.getMessage());
+        return new RestExceptionMessage(HttpStatus.NOT_FOUND.value(), e.getMessage());
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public RestExceptionMessage accessDeniedHandler(AccessDeniedException e) {
 
-        return new RestExceptionMessage(HttpStatus.FORBIDDEN, e.getMessage());
+        return new RestExceptionMessage(HttpStatus.FORBIDDEN.value(), e.getMessage());
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public RestExceptionMessage userAlreadyExistHandler(UserAlreadyExistsException e) {
 
-        return new RestExceptionMessage(HttpStatus.BAD_REQUEST, e.getMessage());
+        return new RestExceptionMessage(HttpStatus.BAD_REQUEST.value(), e.getMessage());
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public RestExceptionMessage userNotFoundException(UserNotFoundException e) {
 
-        return new RestExceptionMessage(HttpStatus.NOT_FOUND, e.getMessage());
+        return new RestExceptionMessage(HttpStatus.NOT_FOUND.value(), e.getMessage());
     }
 }
