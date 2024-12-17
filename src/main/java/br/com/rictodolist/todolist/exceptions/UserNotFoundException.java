@@ -1,14 +1,16 @@
 package br.com.rictodolist.todolist.exceptions;
 
-import br.com.rictodolist.todolist.constants.ErrorMessages;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 public class UserNotFoundException extends RuntimeException {
 
-    public UserNotFoundException() {
-        super(ErrorMessages.USER_NOT_FOUND);
+    public UserNotFoundException(MessageSource messageSource) {
+        super(messageSource.getMessage("error-messages.user-not-found", null, LocaleContextHolder.getLocale()));
     }
 
-    public UserNotFoundException(String username) {
-        super(String.format("%s: ", ErrorMessages.USER_NOT_FOUND) + username);
+    public UserNotFoundException(MessageSource messageSource, String username) {
+        super(String.format("%s: %s",
+                messageSource.getMessage("error-messages.user-not-found", null, LocaleContextHolder.getLocale()), username));
     }
 }

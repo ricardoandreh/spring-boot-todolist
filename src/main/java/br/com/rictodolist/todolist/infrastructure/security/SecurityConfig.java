@@ -3,6 +3,7 @@ package br.com.rictodolist.todolist.infrastructure.security;
 import br.com.rictodolist.todolist.exceptions.UserNotFoundException;
 import br.com.rictodolist.todolist.repositories.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +20,9 @@ public class SecurityConfig {
     @Autowired
     private IUserRepository userRepository;
 
+    @Autowired
+    private MessageSource messageSource;
+
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -32,7 +36,7 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return (String username) -> this.userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException(username));
+                .orElseThrow(() -> new UserNotFoundException(this.messageSource ,username));
     }
 
     @Bean

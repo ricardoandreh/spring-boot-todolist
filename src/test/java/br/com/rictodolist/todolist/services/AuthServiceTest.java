@@ -16,8 +16,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,6 +35,9 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class AuthServiceTest {
+
+    @Autowired
+    private MessageSource messageSource;
 
     @InjectMocks
     private AuthService authService;
@@ -171,7 +175,7 @@ class AuthServiceTest {
     @DisplayName("Should throw UserNotFoundException")
     void loginUserCase3() {
         when(this.authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
-                .thenThrow(new UserNotFoundException(this.userRequestDto.username()));
+                .thenThrow(new UserNotFoundException(this.messageSource, this.userRequestDto.username()));
 
         assertThrows(UserNotFoundException.class, () ->
                 this.authService.login(this.userRequestDto));
@@ -214,7 +218,7 @@ class AuthServiceTest {
         when(this.jwtService.validateToken(refreshRequestDto.refreshToken()))
                 .thenReturn("user");
         when(this.userRepository.findByUsername("user"))
-                .thenThrow(new UserNotFoundException());
+                .thenThrow(new UserNotFoundException(this.messageSource));
 
         assertThrows(UserNotFoundException.class, () ->
                 this.authService.refresh(refreshRequestDto));

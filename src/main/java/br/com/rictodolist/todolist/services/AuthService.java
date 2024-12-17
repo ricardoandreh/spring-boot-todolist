@@ -13,6 +13,7 @@ import br.com.rictodolist.todolist.models.UserModel;
 import br.com.rictodolist.todolist.repositories.IUserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,6 +37,9 @@ public class AuthService {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private MessageSource messageSource;
 
     public UserResponseDTO register(UserRequestDTO userRequestDto) {
         this.userRepository
@@ -77,7 +81,7 @@ public class AuthService {
         String username = this.jwtService.validateToken(refreshToken);
 
         UserModel user = (UserModel) this.userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException(username));
+                .orElseThrow(() -> new UserNotFoundException(this.messageSource, username));
 
         String newAccessToken = this.jwtService.generateAccessToken(user);
 

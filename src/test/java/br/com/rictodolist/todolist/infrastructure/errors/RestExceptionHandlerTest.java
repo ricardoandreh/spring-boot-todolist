@@ -7,7 +7,9 @@ import br.com.rictodolist.todolist.exceptions.UserNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -20,10 +22,13 @@ class RestExceptionHandlerTest {
     @InjectMocks
     private RestExceptionHandler restExceptionHandler;
 
+    @Autowired
+    private MessageSource messageSource;
+
     @Test
     @DisplayName("Should handle UserNotFoundException")
     void handleUserNotFoundException() {
-        UserNotFoundException exception = new UserNotFoundException();
+        UserNotFoundException exception = new UserNotFoundException(this.messageSource);
 
         RestExceptionMessage response = restExceptionHandler.userNotFoundException(exception);
 
@@ -34,7 +39,7 @@ class RestExceptionHandlerTest {
     @Test
     @DisplayName("Should handle UserNotFoundException providing username")
     void handleUserNotFoundExceptionProvidingUsername() {
-        UserNotFoundException exception = new UserNotFoundException("unknown");
+        UserNotFoundException exception = new UserNotFoundException(this.messageSource, "unknown");
 
         RestExceptionMessage response = restExceptionHandler.userNotFoundException(exception);
 
