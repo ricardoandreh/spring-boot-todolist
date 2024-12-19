@@ -45,7 +45,7 @@ public class AuthService {
         this.userRepository
                 .findByUsername(userRequestDto.username())
                 .ifPresent((userDetails) -> {
-                    throw new UserAlreadyExistsException();
+                    throw new UserAlreadyExistsException(this.messageSource);
                 });
 
         String encodedPassword = this.passwordEncoder.encode(userRequestDto.password());

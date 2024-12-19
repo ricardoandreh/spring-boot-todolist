@@ -5,12 +5,12 @@ import org.springframework.context.i18n.LocaleContextHolder;
 
 public class UserNotFoundException extends RuntimeException {
 
-    public UserNotFoundException(MessageSource messageSource) {
-        super(messageSource.getMessage("error-messages.user-not-found", null, LocaleContextHolder.getLocale()));
+    public UserNotFoundException(MessageSource ms) {
+        super(ms.getMessage("error-messages.user-not-found", null, LocaleContextHolder.getLocale()));
     }
 
-    public UserNotFoundException(MessageSource messageSource, String username) {
+    public UserNotFoundException(MessageSource ms, String username) {
         super(String.format("%s: %s",
-                messageSource.getMessage("error-messages.user-not-found", null, LocaleContextHolder.getLocale()), username));
+                ms.getMessage("error-messages.user-not-found", null, LocaleContextHolder.getLocale()), username));
     }
 }

@@ -1,8 +1,12 @@
 package br.com.rictodolist.todolist.exceptions;
 
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+
 public class TaskNotFoundException extends RuntimeException {
 
-    public TaskNotFoundException() {
-        super("{error-messages.task-not-found}");
+    public TaskNotFoundException(MessageSource ms) {
+        super(ms.getMessage("error-messages.task-not-found", null, LocaleContextHolder.getLocale()));
     }
+
 }

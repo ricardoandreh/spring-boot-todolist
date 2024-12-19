@@ -14,6 +14,7 @@ import br.com.rictodolist.todolist.repositories.IUserRepository;
 import br.com.rictodolist.todolist.utils.Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +38,9 @@ public class TaskService {
     @Autowired
     private TaskMapper taskMapper;
 
+    @Autowired
+    private MessageSource messageSource;
+
     public TaskResponseDTO create(TaskRequestDTO taskRequestDto) {
         TaskModel taskModel = new TaskModel();
 
@@ -54,7 +58,7 @@ public class TaskService {
 
     public TaskResponseDTO getOne(UUID id) {
         TaskModel task = this.taskRepository.findById(id)
-                .orElseThrow(TaskNotFoundException::new);
+                .orElseThrow(() -> new TaskNotFoundException(this.messageSource));
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -77,7 +81,7 @@ public class TaskService {
 
     public TaskResponseDTO update(TaskUpdateDTO taskUpdateDto, UUID id) {
         TaskModel task = this.taskRepository.findById(id)
-                .orElseThrow(TaskNotFoundException::new);
+                .orElseThrow(() -> new TaskNotFoundException(this.messageSource));
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -95,7 +99,7 @@ public class TaskService {
 
     public TaskResponseDTO delete(UUID id) {
         TaskModel task = this.taskRepository.findById(id)
-                .orElseThrow(TaskNotFoundException::new);
+                .orElseThrow(() -> new TaskNotFoundException(this.messageSource));
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 

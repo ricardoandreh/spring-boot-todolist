@@ -61,7 +61,7 @@ class RestExceptionHandlerTest {
     @Test
     @DisplayName("Should handle AccessDeniedException")
     void handleAccessDeniedException() {
-        AccessDeniedException exception = new AccessDeniedException();
+        AccessDeniedException exception = new AccessDeniedException(this.messageSource);
 
         RestExceptionMessage response = restExceptionHandler.accessDeniedHandler(exception);
 
@@ -94,7 +94,7 @@ class RestExceptionHandlerTest {
     @Test
     @DisplayName("Should handle UserAlreadyExistsException")
     void handleUserAlreadyExistsException() {
-        UserAlreadyExistsException exception = new UserAlreadyExistsException();
+        UserAlreadyExistsException exception = new UserAlreadyExistsException(this.messageSource);
 
         RestExceptionMessage response = restExceptionHandler.userAlreadyExistHandler(exception);
 
@@ -105,7 +105,7 @@ class RestExceptionHandlerTest {
     @Test
     @DisplayName("Should handle TaskNotFoundException")
     void handleTaskNotFoundException() {
-        TaskNotFoundException exception = new TaskNotFoundException();
+        TaskNotFoundException exception = new TaskNotFoundException(this.messageSource);
 
         RestExceptionMessage response = restExceptionHandler.taskNotFoundHandler(exception);
 
