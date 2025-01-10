@@ -146,7 +146,7 @@ class TaskServiceTest {
 
     @Test
     @DisplayName("Should create a task successfully when everything is OK")
-    void createTaskCase1() {
+    void createTaskSuccessfully() {
         when(this.userRepository.findByUsername(this.baseUser.getUsername()))
                 .thenReturn(Optional.of(this.baseUser));
         when(this.taskRepository.save(any(TaskModel.class)))
@@ -165,7 +165,7 @@ class TaskServiceTest {
 
     @Test
     @DisplayName("Should throw UsernameNotFoundException when creation fails")
-    void createTaskCase2() {
+    void createTaskUsernameNotFoundException() {
         when(this.userRepository.findByUsername("user"))
                 .thenReturn(Optional.empty());
 
@@ -180,7 +180,7 @@ class TaskServiceTest {
 
     @Test
     @DisplayName("Should fetch one task successfully when everything is OK")
-    void getOneTaskCase1() {
+    void getOneTaskSuccessfully() {
         when(this.taskRepository.findById(this.taskId))
                 .thenReturn(Optional.of(this.baseTask));
 
@@ -196,7 +196,7 @@ class TaskServiceTest {
 
     @Test
     @DisplayName("Should throw AccessDeniedException when fetching one fails")
-    void getOneTaskCase2() {
+    void getOneTaskAccessDeniedException() {
         SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken("anotheruser", null)
         );
@@ -214,7 +214,7 @@ class TaskServiceTest {
 
     @Test
     @DisplayName("Should return paginated tasks [PAGE 0] for the authenticated user")
-    void getAllTasksCase1() {
+    void getAllTasksSuccessfullyPage2() {
         int page = 0, size = 3;
         String sortBy = "title";
         boolean ascending = true;
@@ -242,7 +242,7 @@ class TaskServiceTest {
 
     @Test
     @DisplayName("Should return paginated tasks [PAGE 1] with descending order for the authenticated user")
-    void getAllTasksCase2() {
+    void getAllTasksSuccessfullyPage1() {
         int page = 1, size = 2;
         String sortBy = "title";
         boolean ascending = false;
@@ -278,7 +278,7 @@ class TaskServiceTest {
 
     @Test
     @DisplayName("Should update a task successfully when everything is OK")
-    void updateTaskCase1() {
+    void updateTaskSuccessfully() {
         when(this.taskRepository.findById(this.taskId))
                 .thenReturn(Optional.of(this.baseTask));
         when(this.taskRepository.save(any(TaskModel.class)))
@@ -298,7 +298,7 @@ class TaskServiceTest {
 
     @Test
     @DisplayName("Should throw AccessDeniedException when updating fails")
-    void updateTaskCase2() {
+    void updateTaskAccessDeniedException() {
         SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken("anotheruser", null)
         );
@@ -316,8 +316,8 @@ class TaskServiceTest {
     }
 
     @Test
-    @DisplayName("Should throw AccessDeniedException when deleting fails")
-    void deleteTaskCase1() {
+    @DisplayName("Should delete a task successfully when everything is OK")
+    void deleteTaskSuccessfully() {
         when(this.taskRepository.findById(this.taskId))
                 .thenReturn(Optional.of(this.baseTask));
 
@@ -333,7 +333,7 @@ class TaskServiceTest {
 
     @Test
     @DisplayName("Should throw AccessDeniedException when deleting fails")
-    void deleteTaskCase2() {
+    void deleteTaskAccessDeniedException() {
         SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken("anotheruser", null)
         );

@@ -37,13 +37,16 @@ import static org.mockito.Mockito.*;
 class AuthServiceTest {
 
     @Autowired
-    private MessageSource messageSource;
+    private MessageSource messageSourceAutowired;
 
     @InjectMocks
     private AuthService authService;
 
     @Spy
     private UserMapper userMapper;
+
+    @Mock
+    private MessageSource messageSource;
 
     @Mock
     private AuthenticationManager authenticationManager;
@@ -83,7 +86,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("Should register user successfully when everything is OK")
-    void registerUserCase1() {
+    void registerUserSuccessfully() {
         when(this.userRepository.findByUsername(this.userRequestDto.username()))
                 .thenReturn(Optional.empty());
         when(this.passwordEncoder.encode(this.userRequestDto.password()))
@@ -105,7 +108,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("Should throw UserAlreadyExistException")
-    void registerUserCase2() {
+    void registerUserUserAlreadyExistException() {
         UserModel existingUser = this.baseUser;
 
         when(this.userRepository.findByUsername(this.userRequestDto.username()))
@@ -122,7 +125,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("Should login user successfully when everything is OK")
-    void loginUserCase1() {
+    void loginUserSuccessfully() {
         Authentication mockAuthentication = mock(Authentication.class);
 
         when(this.authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
@@ -150,7 +153,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("Should throw BadCredentialsException when authentication fails")
-    void loginUserCase2() {
+    void loginUserBadCredentialsException() {
         UserRequestDTO userWithBadCredentials = new UserRequestDTO(
                 "user",
                 null,
@@ -173,9 +176,9 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("Should throw UserNotFoundException")
-    void loginUserCase3() {
+    void loginUserUserNotFoundException() {
         when(this.authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
-                .thenThrow(new UserNotFoundException(this.messageSource, this.userRequestDto.username()));
+                .thenThrow(new UserNotFoundException(this.messageSourceAutowired, this.userRequestDto.username()));
 
         assertThrows(UserNotFoundException.class, () ->
                 this.authService.login(this.userRequestDto));
@@ -190,7 +193,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("Should login user successfully when everything is OK")
-    void refreshUserCase1() {
+    void refreshUserSuccessfully() {
         RefreshRequestDTO refreshRequestDto = new RefreshRequestDTO("invalid-refresh-token");
 
         when(this.jwtService.validateToken(refreshRequestDto.refreshToken()))
@@ -212,13 +215,13 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("Should throw JWTVerificationException when authentication fails")
-    void refreshUserCase2() {
+    void refreshUserJWTVerificationException() {
         RefreshRequestDTO refreshRequestDto = new RefreshRequestDTO("invalid-refresh-token");
 
         when(this.jwtService.validateToken(refreshRequestDto.refreshToken()))
                 .thenReturn("user");
         when(this.userRepository.findByUsername("user"))
-                .thenThrow(new UserNotFoundException(this.messageSource));
+                .thenThrow(new UserNotFoundException(this.messageSourceAutowired));
 
         assertThrows(UserNotFoundException.class, () ->
                 this.authService.refresh(refreshRequestDto));

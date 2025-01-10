@@ -32,7 +32,7 @@ class RestExceptionHandlerTest {
 
         RestExceptionMessage response = restExceptionHandler.userNotFoundException(exception);
 
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatus());
+        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
         assertEquals("Usuário não encontrado", response.getMessage());
     }
 
@@ -43,7 +43,7 @@ class RestExceptionHandlerTest {
 
         RestExceptionMessage response = restExceptionHandler.userNotFoundException(exception);
 
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatus());
+        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
         assertEquals("Usuário não encontrado: unknown", response.getMessage());
     }
 
@@ -54,7 +54,7 @@ class RestExceptionHandlerTest {
 
         RestExceptionMessage response = restExceptionHandler.badCredentialsHandler(exception);
 
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
         assertEquals("Invalid credentials", response.getMessage());
     }
 
@@ -65,7 +65,7 @@ class RestExceptionHandlerTest {
 
         RestExceptionMessage response = restExceptionHandler.accessDeniedHandler(exception);
 
-        assertEquals(HttpStatus.FORBIDDEN, response.getStatus());
+        assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatus());
         assertEquals("Usuário não possui permissão", response.getMessage());
     }
 
@@ -76,7 +76,7 @@ class RestExceptionHandlerTest {
 
         RestExceptionMessage response = restExceptionHandler.accessDeniedHandler(exception);
 
-        assertEquals(HttpStatus.FORBIDDEN, response.getStatus());
+        assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatus());
         assertEquals("Access denied", response.getMessage());
     }
 
@@ -87,7 +87,7 @@ class RestExceptionHandlerTest {
 
         RestExceptionMessage response = restExceptionHandler.httpMessageNotReadableHandler(exception);
 
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
         assertEquals("Invalid JSON format", response.getMessage());
     }
 
@@ -98,7 +98,7 @@ class RestExceptionHandlerTest {
 
         RestExceptionMessage response = restExceptionHandler.userAlreadyExistHandler(exception);
 
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
         assertEquals("Usuário já existe", response.getMessage());
     }
 
@@ -109,7 +109,7 @@ class RestExceptionHandlerTest {
 
         RestExceptionMessage response = restExceptionHandler.taskNotFoundHandler(exception);
 
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatus());
+        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
         assertEquals("Tarefa não encontrada", response.getMessage());
     }
 }
