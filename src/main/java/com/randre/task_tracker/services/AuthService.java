@@ -1,0 +1,90 @@
+package com.randre.task_tracker.services;
+
+import com.randre.task_tracker.dtos.jwt.AccessResponseDTO;
+import com.randre.task_tracker.dtos.jwt.LoginResponseDTO;
+import com.randre.task_tracker.dtos.jwt.RefreshRequestDTO;
+import com.randre.task_tracker.dtos.user.UserRequestDTO;
+import com.randre.task_tracker.dtos.user.UserResponseDTO;
+import com.randre.task_tracker.exceptions.UserAlreadyExistsException;
+import com.randre.task_tracker.exceptions.UserNotFoundException;
+import com.randre.task_tracker.infrastructure.enums.Role;
+import com.randre.task_tracker.mappers.UserMapper;
+import com.randre.task_tracker.models.UserModel;
+import com.randre.task_tracker.repositories.IUserRepository;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+public class AuthService {
+
+    @Autowired
+    private JwtService jwtService;
+
+    @Autowired
+    private IUserRepository userRepository;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private MessageSource messageSource;
+
+    public UserResponseDTO register(UserRequestDTO userRequestDto) {
+        this.userRepository
+                .findByUsername(userRequestDto.username())
+                .ifPresent((userDetails) -> {
+                    throw new UserAlreadyExistsException(this.messageSource);
+                });
+
+        String encodedPassword = this.passwordEncoder.encode(userRequestDto.password());
+
+        UserModel userModel = new UserModel();
+
+        BeanUtils.copyProperties(userRequestDto, userModel);
+        userModel.setPassword(encodedPassword);
+        userModel.setRole(Role.USER);
+
+        UserModel userCreated = this.userRepository.save(userModel);
+
+        return this.userMapper.toDTO(userCreated);
+    }
+
+    public LoginResponseDTO login(UserRequestDTO userRequestDTO) {
+        UsernamePasswordAuthenticationToken usernamePassword =
+                new UsernamePasswordAuthenticationToken(userRequestDTO.username(), userRequestDTO.password());
+
+        Authentication auth = this.authenticationManager.authenticate(usernamePassword);
+
+        UserModel user = (UserModel) auth.getPrincipal();
+
+        String token = this.jwtService.generateAccessToken(user);
+        String refreshToken = this.jwtService.generateRefreshToken(user);
+
+        return new LoginResponseDTO(token, refreshToken);
+    }
+
+    public AccessResponseDTO refresh(RefreshRequestDTO refreshRequestDTO) {
+        String refreshToken = refreshRequestDTO.refreshToken();
+
+        String username = this.jwtService.validateToken(refreshToken);
+
+        UserModel user = (UserModel) this.userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(this.messageSource, username));
+
+        String newAccessToken = this.jwtService.generateAccessToken(user);
+
+        return new AccessResponseDTO(newAccessToken);
+    }
+}

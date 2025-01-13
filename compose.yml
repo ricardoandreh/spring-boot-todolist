@@ -1,0 +1,48 @@
+name: task-tracker
+
+services:
+  postgres:
+    image: docker.io/postgres:16.3-alpine3.20
+    container_name: task-tracker-postgres
+    environment:
+      POSTGRES_DB: task-tracker-db
+      POSTGRES_USER: task-tracker
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - task-tracker-network
+
+  task-tracker-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: task-tracker-api:latest
+    container_name: task-tracker-api
+    depends_on:
+      - postgres
+    ports:
+      - "10000:10000"
+    environment:
+      JDK_JAVA_OPTIONS: "-Xms256m -Xmx512m -Dspring.profiles.active=prod"
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: task-tracker-db
+      DATABASE_USER: task-tracker
+      DATABASE_PASSWORD: secret
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:10000/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - task-tracker-network
+
+volumes:
+  postgres-data:
+
+networks:
+  task-tracker-network:
+    driver: bridge

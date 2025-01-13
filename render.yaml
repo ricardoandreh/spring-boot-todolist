@@ -1,13 +1,13 @@
 databases:
-  - name: todolist-db
+  - name: task-tracker-db
     plan: free
-    databaseName: todolist
-    user: todolist
+    databaseName: task-tracker
+    user: task-tracker
 
 services:
   - type: web
     plan: free
-    name: randre-todolist
+    name: task-tracker-api
     runtime: docker
     dockerfilePath: Dockerfile
     healthCheckPath: /actuator/health
@@ -16,22 +16,22 @@ services:
         value: -Xms256m -Xmx512m -Dspring.profiles.active=prod
       - key: DATABASE_HOST
         fromDatabase:
-          name: todolist-db
+          name: task-tracker-db
           property: host
       - key: DATABASE_PORT
         fromDatabase:
-          name: todolist-db
+          name: task-tracker-db
           property: port
       - key: DATABASE_NAME
         fromDatabase:
-          name: todolist-db
+          name: task-tracker-db
           property: database
       - key: DATABASE_USER
         fromDatabase:
-          name: todolist-db
+          name: task-tracker-db
           property: user
       - key: DATABASE_PASSWORD
         fromDatabase:
-          name: todolist-db
+          name: task-tracker-db
           property: password
     numInstances: 1
