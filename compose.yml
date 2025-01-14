@@ -3,15 +3,21 @@ name: task-tracker
 services:
   postgres:
     image: docker.io/postgres:16.3-alpine3.20
-    container_name: task-tracker-postgres
+    container_name: task-tracker-db
     environment:
-      POSTGRES_DB: task-tracker-db
-      POSTGRES_USER: task-tracker
+      POSTGRES_DB: task_tracker
+      POSTGRES_USER: sa
       POSTGRES_PASSWORD: secret
     ports:
       - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: "psql -d task_tracker -U sa -c 'SELECT 1' || exit 1"
+      interval: 3s
+      timeout: 1s
+      retries: 2
+      start_period: 2s
     networks:
       - task-tracker-network
 
@@ -22,18 +28,19 @@ services:
     image: task-tracker-api:latest
     container_name: task-tracker-api
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     ports:
-      - "10000:10000"
+      - "8080:8080"
     environment:
-      JDK_JAVA_OPTIONS: "-Xms256m -Xmx512m -Dspring.profiles.active=prod"
+      JDK_JAVA_OPTIONS: -Xms256m -Xmx512m -Dspring.profiles.active=test
       DATABASE_HOST: postgres
       DATABASE_PORT: 5432
       DATABASE_NAME: task_tracker
-      DATABASE_USER: task_tracker
+      DATABASE_USER: sa
       DATABASE_PASSWORD: secret
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:10000/actuator/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
       interval: 30s
       timeout: 10s
       retries: 3
