@@ -29,8 +29,8 @@ services:
       JDK_JAVA_OPTIONS: "-Xms256m -Xmx512m -Dspring.profiles.active=prod"
       DATABASE_HOST: postgres
       DATABASE_PORT: 5432
-      DATABASE_NAME: task-tracker-db
-      DATABASE_USER: task-tracker
+      DATABASE_NAME: task_tracker
+      DATABASE_USER: task_tracker
       DATABASE_PASSWORD: secret
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:10000/actuator/health"]

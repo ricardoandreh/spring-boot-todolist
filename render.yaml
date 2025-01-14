@@ -1,8 +1,8 @@
 databases:
   - name: task-tracker-db
     plan: free
-    databaseName: task-tracker
-    user: task-tracker
+    databaseName: task_tracker
+    user: task_tracker
 
 services:
   - type: web
