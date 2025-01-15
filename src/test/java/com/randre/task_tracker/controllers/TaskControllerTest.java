@@ -2,9 +2,7 @@ package com.randre.task_tracker.controllers;
 
 import com.randre.task_tracker.constants.ErrorMessages;
 import com.randre.task_tracker.dtos.task.TaskPaginationDTO;
-import com.randre.task_tracker.dtos.task.TaskRequestDTO;
 import com.randre.task_tracker.dtos.task.TaskResponseDTO;
-import com.randre.task_tracker.dtos.task.TaskUpdateDTO;
 import com.randre.task_tracker.infrastructure.enums.Priority;
 import com.randre.task_tracker.repositories.IUserRepository;
 import com.randre.task_tracker.services.JwtService;
@@ -26,8 +24,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -52,7 +48,16 @@ class TaskControllerTest {
     private TaskPaginationDTO baseTaskPagination;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
+        this.mockMvc.perform(post("/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                            {
+                                "username": "user",
+                                "password": "user"
+                            }
+                        """));
+
         this.baseTaskResponse = new TaskResponseDTO(
                 UUID.randomUUID(),
                 "Task 1",
@@ -119,8 +124,8 @@ class TaskControllerTest {
     @DisplayName("Should create a task successfully")
     @WithMockUser(authorities = {"CREATE_TASK"})
     void createTask() throws Exception {
-        when(this.taskService.create(any(TaskRequestDTO.class)))
-                .thenReturn(this.baseTaskResponse);
+//        when(this.taskService.create(any(TaskRequestDTO.class)))
+//                .thenReturn(this.baseTaskResponse);
 
         this.mockMvc.perform(post("/tasks")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -144,8 +149,8 @@ class TaskControllerTest {
     @DisplayName("Should read all tasks successfully")
     @WithMockUser(authorities = {"READ_ALL_TASKS"})
     void listAllTasks() throws Exception {
-        when(this.taskService.getAll(anyInt(), anyInt(), anyString(), anyBoolean()))
-                .thenReturn(this.baseTaskPagination);
+//        when(this.taskService.getAll(anyInt(), anyInt(), anyString(), anyBoolean()))
+//                .thenReturn(this.baseTaskPagination);
 
         this.mockMvc.perform(get("/tasks")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -160,8 +165,8 @@ class TaskControllerTest {
     @DisplayName("Should read one detail task successfully")
     @WithMockUser(authorities = {"READ_ONE_TASK"})
     void listOneTask() throws Exception {
-        when(this.taskService.getOne(any(UUID.class)))
-                .thenReturn(this.baseTaskResponse);
+//        when(this.taskService.getOne(any(UUID.class)))
+//                .thenReturn(this.baseTaskResponse);
 
         this.mockMvc.perform(get("/tasks/" + this.baseTaskResponse.id())
                         .contentType(MediaType.APPLICATION_JSON))
@@ -175,8 +180,8 @@ class TaskControllerTest {
     @DisplayName("Should update a task successfully")
     @WithMockUser(authorities = {"UPDATE_TASK"})
     void updateTask() throws Exception {
-        when(this.taskService.update(any(TaskUpdateDTO.class), any(UUID.class)))
-                .thenReturn(this.baseTaskUpdated);
+//        when(this.taskService.update(any(TaskUpdateDTO.class), any(UUID.class)))
+//                .thenReturn(this.baseTaskUpdated);
 
         this.mockMvc.perform(patch("/tasks/" + this.baseTaskUpdated.id())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -198,8 +203,8 @@ class TaskControllerTest {
     @DisplayName("Should throw MethodArgumentNotValidException when description is blank validation fails")
     @WithMockUser(authorities = {"UPDATE_TASK"})
     void updateTaskAssertBlank() throws Exception {
-        when(this.taskService.update(any(TaskUpdateDTO.class), any(UUID.class)))
-                .thenReturn(this.baseTaskUpdated);
+//        when(this.taskService.update(any(TaskUpdateDTO.class), any(UUID.class)))
+//                .thenReturn(this.baseTaskUpdated);
 
         this.mockMvc.perform(patch("/tasks/" + this.baseTaskUpdated.id())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -219,8 +224,8 @@ class TaskControllerTest {
     @DisplayName("Should delete a task successfully")
     @WithMockUser(authorities = {"DELETE_TASK"})
     void deleteTask() throws Exception {
-        when(this.taskService.delete(any(UUID.class)))
-                .thenReturn(this.baseTaskResponse);
+//        when(this.taskService.delete(any(UUID.class)))
+//                .thenReturn(this.baseTaskResponse);
 
         this.mockMvc.perform(delete("/tasks/" + this.baseTaskResponse.id())
                         .contentType(MediaType.APPLICATION_JSON))

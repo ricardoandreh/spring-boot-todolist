@@ -11,17 +11,44 @@ import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import java.util.ArrayList;
+
 import java.util.List;
 
 @Configuration
 public class OpenAPIConfig {
 
-    @Value("${randre.openapi.dev-url}")
-    private String devUrl;
+    @Value("${randre.openapi.url}")
+    private String url;
 
-    @Value("${randre.openapi.prod-url}")
-    private String prodUrl;
+    private List<Server> getServers() {
+        Server server = new Server();
+        server.setUrl(this.url);
+
+        if (this.url.contains("onrender")) {
+            server.setDescription("Server URL in Production environment");
+        } else {
+            server.setDescription("Server URL in Development environment");
+        }
+
+        return List.of(server);
+    }
+
+    private Info getInfo() {
+        Contact contact = new Contact();
+        contact.setEmail("ricardo.andre.ifc@gmail.com");
+        contact.setName("Ricardo André da Silva");
+        contact.setUrl("https://github.com/ricardoandreh/");
+
+        License mitLicense = new License().name("MIT License").url("https://choosealicense.com/licenses/mit/");
+
+        return new Info()
+                .title("Task Management API")
+                .version("1.0")
+                .contact(contact)
+                .description("This API exposes endpoints to manage tasks.")
+                .termsOfService("https://github.com/ricardoandreh/")
+                .license(mitLicense);
+    }
 
     private SecurityScheme createAPIKeyScheme() {
         return new SecurityScheme().type(SecurityScheme.Type.HTTP)
@@ -31,34 +58,9 @@ public class OpenAPIConfig {
 
     @Bean
     public OpenAPI myOpenAPI() {
-        List<Server> servers = new ArrayList<>(2);
+        List<Server> servers = this.getServers();
 
-        Server devServer = new Server();
-        devServer.setUrl(devUrl);
-        devServer.setDescription("Server URL in Development environment");
-        servers.add(devServer);
-
-        if (!prodUrl.isBlank()) {
-            Server prodServer = new Server();
-            prodServer.setUrl(prodUrl);
-            prodServer.setDescription("Server URL in Production environment");
-            servers.add(prodServer);
-        }
-
-        Contact contact = new Contact();
-        contact.setEmail("ricardo.andre.ifc@gmail.com");
-        contact.setName("Ricardo André da Silva");
-        contact.setUrl("https://github.com/ricardoandreh/");
-
-        License mitLicense = new License().name("MIT License").url("https://choosealicense.com/licenses/mit/");
-
-        Info info = new Info()
-                .title("Task Management API")
-                .version("1.0")
-                .contact(contact)
-                .description("This API exposes endpoints to manage tasks.")
-                .termsOfService("https://github.com/ricardoandreh/")
-                .license(mitLicense);
+        Info info = this.getInfo();
 
         return new OpenAPI()
                 .addSecurityItem(new SecurityRequirement().

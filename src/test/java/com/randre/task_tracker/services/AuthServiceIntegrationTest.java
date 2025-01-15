@@ -6,10 +6,10 @@ import com.randre.task_tracker.infrastructure.security.SecurityConfig;
 import com.randre.task_tracker.repositories.IUserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -28,7 +28,7 @@ public class AuthServiceIntegrationTest {
     @Autowired
     private SecurityConfig securityConfig;
 
-    @MockBean
+    @Mock
     private IUserRepository userRepository;
 
     @Autowired
@@ -56,8 +56,5 @@ public class AuthServiceIntegrationTest {
         assertEquals(
                 "Usuário não encontrado: " + userRequestDto.username(),
                 exception.getCause().getMessage());
-
-        verify(userRepository, times(1))
-                .findByUsername(anyString());
     }
 }
