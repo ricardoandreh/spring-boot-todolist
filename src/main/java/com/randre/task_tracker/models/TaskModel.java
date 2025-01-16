@@ -1,10 +1,10 @@
 package com.randre.task_tracker.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.randre.task_tracker.constants.ErrorMessages;
 import com.randre.task_tracker.infrastructure.enums.Priority;
 import com.randre.task_tracker.validations.annotations.DateRange;
 import com.randre.task_tracker.validations.annotations.FutureDate;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -61,4 +61,16 @@ public class TaskModel {
     @JsonIgnore
     @JoinColumn(name = "user_id")
     private UserModel user;
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "title='" + this.title + '\'' +
+                ", description='" + this.description + '\'' +
+                ", startAt=" + this.startAt +
+                ", endAt=" + this.endAt +
+                ", priority=" + this.priority +
+                ", createdAt=" + this.createdAt +
+                '}';
+    }
 }
