@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_DB: task_tracker
       POSTGRES_USER: sa
-      POSTGRES_PASSWORD: secret
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:secret}
     ports:
       - "5432:5432"
     volumes:
@@ -39,12 +39,12 @@ services:
       DATABASE_PORT: 5432
       DATABASE_NAME: task_tracker
       DATABASE_USER: sa
-      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:secret}
       GROQ_API_KEY: ${GROQ_API_KEY}
       GROQ_CHAT_MODEL: ${GROQ_CHAT_MODEL}
-      GROQ_CHAT_TEMPERATURE: ${GROQ_CHAT_TEMPERATURE}
+      GROQ_CHAT_TEMPERATURE: ${GROQ_CHAT_TEMPERATURE:0.7}
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
       interval: 30s
       timeout: 10s
       retries: 3

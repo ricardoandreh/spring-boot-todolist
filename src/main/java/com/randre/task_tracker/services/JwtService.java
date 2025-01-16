@@ -18,24 +18,18 @@ public class JwtService {
     private String secret;
 
     public String generateAccessToken(UserModel user) {
-        if (this.secret == null || this.secret.isEmpty()) {
-            throw new IllegalArgumentException("The Secret cannot be null or empty");
-        }
+        Instant expirationDate = this.generateAccessExpirationDate();
 
-        try {
-            Algorithm algorithm = Algorithm.HMAC256(this.secret);
-
-            return JWT.create()
-                    .withIssuer("auth0")
-                    .withSubject(user.getUsername())
-                    .withExpiresAt(generateAccessExpirationDate())
-                    .sign(algorithm);
-        } catch (JWTCreationException e) {
-            throw new RuntimeException("Error while generating token", e);
-        }
+        return this.generateToken(user.getUsername(), expirationDate);
     }
 
     public String generateRefreshToken(UserModel user) {
+        Instant expirationDate = this.generateRefreshExpirationDate();
+
+        return this.generateToken(user.getUsername(), expirationDate);
+    }
+
+    public String generateToken(String username, Instant expirationDate) {
         if (this.secret == null || this.secret.isEmpty()) {
             throw new IllegalArgumentException("The Secret cannot be null or empty");
         }
@@ -45,8 +39,8 @@ public class JwtService {
 
             return JWT.create()
                     .withIssuer("auth0")
-                    .withSubject(user.getUsername())
-                    .withExpiresAt(generateRefreshTokenExpirationDate())
+                    .withSubject(username)
+                    .withExpiresAt(expirationDate)
                     .sign(algorithm);
         } catch (JWTCreationException e) {
             throw new RuntimeException("Error while generating token", e);
@@ -72,7 +66,7 @@ public class JwtService {
         return Instant.now().plusMillis(SecurityConstants.JWT_ACCESS_EXPIRATION_TIME);
     }
 
-    private Instant generateRefreshTokenExpirationDate() {
+    private Instant generateRefreshExpirationDate() {
 
         return Instant.now().plusMillis(SecurityConstants.JWT_REFRESH_TOKEN_EXPIRATION_TIME);
     }

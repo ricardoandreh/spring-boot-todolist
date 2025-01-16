@@ -79,7 +79,7 @@ public class TaskService {
 
         Page<TaskModel> tasks = this.taskRepository.findByUserUsername(username, pageable);
 
-        String feedback = generateFeedback ? this.groqService.generateFeedback(tasks) : "";
+        String feedback = generateFeedback ? this.groqService.generateFeedbackByPage(tasks) : null;
 
         return this.taskMapper.toPaginationDTO(tasks, pageable, sortBy, ascending, feedback);
     }

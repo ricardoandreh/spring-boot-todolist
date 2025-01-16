@@ -70,7 +70,7 @@ public class AuthService {
         UserModel user = (UserModel) auth.getPrincipal();
 
         String token = this.jwtService.generateAccessToken(user);
-        String refreshToken = this.jwtService.generateRefreshToken(user);
+        String refreshToken = this.jwtService.generateAccessToken(user);
 
         return new LoginResponseDTO(token, refreshToken);
     }
@@ -83,7 +83,7 @@ public class AuthService {
         UserModel user = (UserModel) this.userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException(this.messageSource, username));
 
-        String newAccessToken = this.jwtService.generateAccessToken(user);
+        String newAccessToken = this.jwtService.generateRefreshToken(user);
 
         return new AccessResponseDTO(newAccessToken);
     }

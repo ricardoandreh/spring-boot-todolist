@@ -47,7 +47,6 @@ public class TaskMapper {
                                              String feedback) {
 
         List<TaskResponseDTO> taskResponseDtos = this.toDTOList(tasks);
-
         int currentPage = pageable.getPageNumber();
         int pageSize = pageable.getPageSize();
 
