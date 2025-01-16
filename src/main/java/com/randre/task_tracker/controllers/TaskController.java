@@ -39,9 +39,10 @@ public class TaskController {
     public TaskPaginationDTO listAll(@RequestParam(defaultValue = "0") int page,
                                      @RequestParam(defaultValue = "5") int size,
                                      @RequestParam(defaultValue = "createdAt") String sortBy,
-                                     @RequestParam(defaultValue = "true") boolean ascending) {
+                                     @RequestParam(defaultValue = "true") boolean ascending,
+                                     @RequestParam(defaultValue = "false") boolean generateFeedback) {
 
-        return this.taskService.getAll(page, size, sortBy, ascending);
+        return this.taskService.getAll(page, size, sortBy, ascending, generateFeedback);
     }
 
     @PatchMapping("/{id}")

@@ -30,6 +30,9 @@ import java.util.UUID;
 public class TaskService {
 
     @Autowired
+    private GroqService groqService;
+
+    @Autowired
     private ITaskRepository taskRepository;
 
     @Autowired
@@ -69,14 +72,16 @@ public class TaskService {
         return this.taskMapper.toDTO(task);
     }
 
-    public TaskPaginationDTO getAll(int page, int size, String sortBy, boolean ascending) {
+    public TaskPaginationDTO getAll(int page, int size, String sortBy, boolean ascending, boolean generateFeedback) {
         Pageable pageable = this.getPageable(page, size, sortBy, ascending);
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         Page<TaskModel> tasks = this.taskRepository.findByUserUsername(username, pageable);
 
-        return this.taskMapper.toPaginationDTO(tasks, pageable, sortBy, ascending);
+        String feedback = generateFeedback ? this.groqService.generateFeedback(tasks) : "";
+
+        return this.taskMapper.toPaginationDTO(tasks, pageable, sortBy, ascending, feedback);
     }
 
     public TaskResponseDTO update(TaskUpdateDTO taskUpdateDto, UUID id) {
@@ -117,7 +122,7 @@ public class TaskService {
 
         Page<TaskModel> tasks = this.taskRepository.findByTitle(query, pageable);
 
-        return this.taskMapper.toPaginationDTO(tasks, pageable, sortBy, ascending);
+        return this.taskMapper.toPaginationDTO(tasks, pageable, sortBy, ascending, null);
     }
 
 

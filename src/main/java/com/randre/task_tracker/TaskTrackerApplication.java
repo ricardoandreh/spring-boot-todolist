@@ -14,12 +14,8 @@ public class TaskTrackerApplication {
         SpringApplication.run(TaskTrackerApplication.class, args);
     }
 
-    private final OpenAiChatModel chatModel;
-
     @Autowired
-    public TaskTrackerApplication(OpenAiChatModel chatModel) {
-        this.chatModel = chatModel;
-    }
+    private OpenAiChatModel chatModel;
 
     @Bean
     CommandLineRunner runner() {

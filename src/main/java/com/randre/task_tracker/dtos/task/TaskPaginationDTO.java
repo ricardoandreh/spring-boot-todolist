@@ -9,5 +9,6 @@ public record TaskPaginationDTO(
         int size,
         String next,
         String previous,
-        List<TaskResponseDTO> results) {
+        List<TaskResponseDTO> results,
+        String feedback) {
 }

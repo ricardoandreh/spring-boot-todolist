@@ -225,7 +225,7 @@ class TaskServiceTest {
         when(this.taskRepository.findByUserUsername(this.baseUser.getUsername(), pageable))
                 .thenReturn(tasksPage);
 
-        TaskPaginationDTO taskPaginationDto = this.taskService.getAll(page, size, sortBy, ascending);
+        TaskPaginationDTO taskPaginationDto = this.taskService.getAll(page, size, sortBy, ascending, false);
 
         assertNotNull(taskPaginationDto);
         assertEquals("Task 1", taskPaginationDto.results().get(0).title());
@@ -236,7 +236,7 @@ class TaskServiceTest {
         verify(this.taskRepository, times(1))
                 .findByUserUsername(this.baseUser.getUsername(), pageable);
         verify(this.taskMapper, times(1))
-                .toPaginationDTO(tasksPage, pageable, sortBy, ascending);
+                .toPaginationDTO(tasksPage, pageable, sortBy, ascending, null);
     }
 
     @Test
@@ -261,7 +261,7 @@ class TaskServiceTest {
         when(this.taskRepository.findByUserUsername(this.baseUser.getUsername(), pageable))
                 .thenReturn(tasksPage);
 
-        TaskPaginationDTO taskPaginationDto = this.taskService.getAll(page, size, sortBy, ascending);
+        TaskPaginationDTO taskPaginationDto = this.taskService.getAll(page, size, sortBy, ascending, false);
 
         assertNotNull(taskPaginationDto);
         assertEquals("Task 1", taskPaginationDto.results().get(0).title());
@@ -272,7 +272,7 @@ class TaskServiceTest {
         verify(this.taskRepository, times(1))
                 .findByUserUsername(this.baseUser.getUsername(), pageable);
         verify(this.taskMapper, times(1))
-                .toPaginationDTO(tasksPage, pageable, sortBy, ascending);
+                .toPaginationDTO(tasksPage, pageable, sortBy, ascending, null);
     }
 
     @Test

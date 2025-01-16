@@ -43,7 +43,8 @@ public class TaskMapper {
     public TaskPaginationDTO toPaginationDTO(Page<TaskModel> tasks,
                                              Pageable pageable,
                                              String sortBy,
-                                             boolean ascending) {
+                                             boolean ascending,
+                                             String feedback) {
 
         List<TaskResponseDTO> taskResponseDtos = this.toDTOList(tasks);
 
@@ -75,7 +76,8 @@ public class TaskMapper {
                 pageSize,
                 nextLink,
                 previousLink,
-                taskResponseDtos
+                taskResponseDtos,
+                feedback
         );
     }
 }
