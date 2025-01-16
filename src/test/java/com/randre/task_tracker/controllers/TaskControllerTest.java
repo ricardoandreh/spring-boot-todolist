@@ -116,7 +116,8 @@ class TaskControllerTest {
                                 LocalDateTime.now().minusDays(2),
                                 Link.of("/tasks/3", "self")
                         )
-                )
+                ),
+                null
         );
     }
 
