@@ -12,10 +12,10 @@ services:
     dockerfilePath: Dockerfile
     healthCheckPath: /actuator/health
     envVars:
-      - key: JDK_JAVA_OPTIONS
-        value: -Xms256m -Xmx512m -Dspring.profiles.active=prod
       - key: SECRET_KEY
         generateValue: true
+      - key: JDK_JAVA_OPTIONS
+        value: -Xms256m -Xmx512m -Dspring.profiles.active=prod
       - key: DATABASE_HOST
         fromDatabase:
           name: task-tracker-db
@@ -36,4 +36,11 @@ services:
         fromDatabase:
           name: task-tracker-db
           property: password
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_CHAT_MODEL
+        sync: false
+      - key: GROQ_CHAT_TEMPERATURE
+        sync: false
+
     numInstances: 1
