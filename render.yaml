@@ -42,5 +42,4 @@ services:
         sync: false
       - key: GROQ_CHAT_TEMPERATURE
         sync: false
-
     numInstances: 1

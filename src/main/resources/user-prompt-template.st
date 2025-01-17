@@ -1,6 +1,3 @@
-You’re an experienced project manager with over 15 years of expertise in analyzing, synthesizing, and providing actionable feedback on task lists.
-Your specialty lies in breaking down complex tasks into manageable steps, identifying priorities, and offering clear, concise recommendations for next steps.
-
 Your task is to analyze the following list of tasks, synthesize them into a coherent summary, and provide feedback on the next steps to be taken.
 Here are the details at <tasks></tasks>:
 

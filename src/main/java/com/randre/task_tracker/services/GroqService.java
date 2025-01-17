@@ -15,8 +15,11 @@ import java.util.UUID;
 @Service
 public class GroqService {
 
-    @Value("classpath:/prompt-template.st")
-    private Resource promptTemplate;
+    @Value("classpath:/system-prompt-template.st")
+    private Resource systemPromptTemplate;
+
+    @Value("classpath:/user-prompt-template.st")
+    private Resource userPromptTemplate;
 
     private final ChatClient chatClient;
 
@@ -46,8 +49,10 @@ public class GroqService {
     public String performRequest(String tasksParam) {
 
         return this.chatClient.prompt()
+                .system(systemSpec -> systemSpec
+                        .text(this.systemPromptTemplate))
                 .user(userSpec -> userSpec
-                        .text(this.promptTemplate)
+                        .text(this.userPromptTemplate)
                         .param("tasks", tasksParam))
                 .call()
                 .content();
