@@ -1,8 +1,9 @@
 package com.randre.task_tracker.services;
 
-import com.randre.task_tracker.dtos.jwt.LoginResponseDTO;
+import com.randre.task_tracker.dtos.jwt.TokenResponseDTO;
 import com.randre.task_tracker.dtos.jwt.RefreshRequestDTO;
-import com.randre.task_tracker.dtos.user.UserRequestDTO;
+import com.randre.task_tracker.dtos.user.LoginRequestDTO;
+import com.randre.task_tracker.dtos.user.RegisterRequestDTO;
 import com.randre.task_tracker.dtos.user.UserResponseDTO;
 import com.randre.task_tracker.exceptions.UserAlreadyExistsException;
 import com.randre.task_tracker.exceptions.UserNotFoundException;
@@ -61,7 +62,8 @@ class AuthServiceTest {
     private JwtService jwtService;
 
     private UserModel baseUser;
-    private UserRequestDTO userRequestDto;
+    private RegisterRequestDTO registerRequestDto;
+    private LoginRequestDTO loginRequestDto;
 
     @BeforeEach
     void setUp() {
@@ -77,9 +79,13 @@ class AuthServiceTest {
                 null
         );
 
-        this.userRequestDto = new UserRequestDTO(
+        this.registerRequestDto = new RegisterRequestDTO(
                 baseUser.getUsername(),
                 null,
+                baseUser.getPassword()
+        );
+        this.loginRequestDto = new LoginRequestDTO(
+                baseUser.getUsername(),
                 baseUser.getPassword()
         );
     }
@@ -87,21 +93,21 @@ class AuthServiceTest {
     @Test
     @DisplayName("Should register user successfully when everything is OK")
     void registerUserSuccessfully() {
-        when(this.userRepository.findByUsername(this.userRequestDto.username()))
+        when(this.userRepository.findByUsername(this.registerRequestDto.username()))
                 .thenReturn(Optional.empty());
-        when(this.passwordEncoder.encode(this.userRequestDto.password()))
+        when(this.passwordEncoder.encode(this.registerRequestDto.password()))
                 .thenReturn("encodedPassword");
         when(this.userRepository.save(any(UserModel.class)))
                 .thenReturn(this.baseUser);
 
-        UserResponseDTO user = this.authService.register(userRequestDto);
+        UserResponseDTO user = this.authService.register(registerRequestDto);
 
         assertNotNull(user);
 
         verify(this.userRepository, times(1))
-                .findByUsername(this.userRequestDto.username());
+                .findByUsername(this.registerRequestDto.username());
         verify(this.passwordEncoder, times(1))
-                .encode(this.userRequestDto.password());
+                .encode(this.registerRequestDto.password());
         verify(this.userRepository, times(1))
                 .save(any(UserModel.class));
     }
@@ -111,14 +117,14 @@ class AuthServiceTest {
     void registerUserUserAlreadyExistException() {
         UserModel existingUser = this.baseUser;
 
-        when(this.userRepository.findByUsername(this.userRequestDto.username()))
+        when(this.userRepository.findByUsername(this.registerRequestDto.username()))
                 .thenReturn(Optional.of(existingUser));
 
         assertThrows(UserAlreadyExistsException.class, () ->
-                this.authService.register(this.userRequestDto));
+                this.authService.register(this.registerRequestDto));
 
         verify(this.userRepository, times(1))
-                .findByUsername(this.userRequestDto.username());
+                .findByUsername(this.registerRequestDto.username());
         verify(this.userRepository, never())
                 .save(any(UserModel.class));
     }
@@ -137,11 +143,11 @@ class AuthServiceTest {
         when(this.jwtService.generateRefreshToken(this.baseUser))
                 .thenReturn("refresh-token");
 
-        LoginResponseDTO loginResponseDto = this.authService.login(this.userRequestDto);
+        TokenResponseDTO tokenResponseDto = this.authService.login(this.loginRequestDto);
 
-        assertNotNull(loginResponseDto);
-        assertEquals("access-token", loginResponseDto.access());
-        assertEquals("refresh-token", loginResponseDto.refreshToken());
+        assertNotNull(tokenResponseDto);
+        assertEquals("access-token", tokenResponseDto.access());
+        assertEquals("refresh-token", tokenResponseDto.refresh());
 
         verify(this.authenticationManager, times(1))
                 .authenticate(any(UsernamePasswordAuthenticationToken.class));
@@ -154,9 +160,8 @@ class AuthServiceTest {
     @Test
     @DisplayName("Should throw BadCredentialsException when authentication fails")
     void loginUserBadCredentialsException() {
-        UserRequestDTO userWithBadCredentials = new UserRequestDTO(
+        LoginRequestDTO userWithBadCredentials = new LoginRequestDTO(
                 "user",
-                null,
                 "wrongPassword"
         );
 
@@ -178,10 +183,10 @@ class AuthServiceTest {
     @DisplayName("Should throw UserNotFoundException")
     void loginUserUserNotFoundException() {
         when(this.authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
-                .thenThrow(new UserNotFoundException(this.messageSourceAutowired, this.userRequestDto.username()));
+                .thenThrow(new UserNotFoundException(this.messageSourceAutowired, this.registerRequestDto.username()));
 
         assertThrows(UserNotFoundException.class, () ->
-                this.authService.login(this.userRequestDto));
+                this.authService.login(this.loginRequestDto));
 
         verify(this.authenticationManager, times(1))
                 .authenticate(any(UsernamePasswordAuthenticationToken.class));
@@ -197,8 +202,8 @@ class AuthServiceTest {
         RefreshRequestDTO refreshRequestDto = new RefreshRequestDTO("invalid-refresh-token");
 
         when(this.jwtService.validateToken(refreshRequestDto.refreshToken()))
-                .thenReturn(this.userRequestDto.username());
-        when(this.userRepository.findByUsername(this.userRequestDto.username()))
+                .thenReturn(this.registerRequestDto.username());
+        when(this.userRepository.findByUsername(this.registerRequestDto.username()))
                 .thenReturn(Optional.of(this.baseUser));
         when(this.jwtService.generateAccessToken(this.baseUser))
                 .thenReturn("access-token");
@@ -208,7 +213,7 @@ class AuthServiceTest {
         verify(this.jwtService, times(1))
                 .validateToken("invalid-refresh-token");
         verify(this.userRepository, times(1))
-                .findByUsername(this.userRequestDto.username());
+                .findByUsername(this.registerRequestDto.username());
         verify(this.jwtService, times(1))
                 .generateAccessToken(any(UserModel.class));
     }
@@ -229,7 +234,7 @@ class AuthServiceTest {
         verify(this.jwtService, times(1))
                 .validateToken("invalid-refresh-token");
         verify(this.userRepository, times(1))
-                .findByUsername(this.userRequestDto.username());
+                .findByUsername(this.registerRequestDto.username());
         verify(this.jwtService, never())
                 .generateAccessToken(any(UserModel.class));
     }
@@ -237,17 +242,17 @@ class AuthServiceTest {
     @Test
     @DisplayName("Should enconde password when creating new user")
     void registerUserHashesPassword() {
-        when(this.userRepository.findByUsername(this.userRequestDto.username()))
+        when(this.userRepository.findByUsername(this.registerRequestDto.username()))
                 .thenReturn(Optional.empty());
-        when(this.passwordEncoder.encode(this.userRequestDto.password()))
+        when(this.passwordEncoder.encode(this.registerRequestDto.password()))
                 .thenReturn("encodedPassword");
         when(this.userRepository.save(any(UserModel.class)))
                 .thenReturn(this.baseUser);
 
-        this.authService.register(this.userRequestDto);
+        this.authService.register(this.registerRequestDto);
 
         verify(this.passwordEncoder, times(1))
-                .encode(this.userRequestDto.password());
+                .encode(this.registerRequestDto.password());
         verify(this.userRepository, times(1))
                 .save(any(UserModel.class));
     }

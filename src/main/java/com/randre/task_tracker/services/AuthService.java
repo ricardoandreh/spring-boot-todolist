@@ -1,9 +1,10 @@
 package com.randre.task_tracker.services;
 
 import com.randre.task_tracker.dtos.jwt.AccessResponseDTO;
-import com.randre.task_tracker.dtos.jwt.LoginResponseDTO;
+import com.randre.task_tracker.dtos.jwt.TokenResponseDTO;
 import com.randre.task_tracker.dtos.jwt.RefreshRequestDTO;
-import com.randre.task_tracker.dtos.user.UserRequestDTO;
+import com.randre.task_tracker.dtos.user.LoginRequestDTO;
+import com.randre.task_tracker.dtos.user.RegisterRequestDTO;
 import com.randre.task_tracker.dtos.user.UserResponseDTO;
 import com.randre.task_tracker.exceptions.UserAlreadyExistsException;
 import com.randre.task_tracker.exceptions.UserNotFoundException;
@@ -41,18 +42,18 @@ public class AuthService {
     @Autowired
     private MessageSource messageSource;
 
-    public UserResponseDTO register(UserRequestDTO userRequestDto) {
+    public UserResponseDTO register(RegisterRequestDTO registerRequestDto) {
         this.userRepository
-                .findByUsername(userRequestDto.username())
+                .findByUsername(registerRequestDto.username())
                 .ifPresent((userDetails) -> {
                     throw new UserAlreadyExistsException(this.messageSource);
                 });
 
-        String encodedPassword = this.passwordEncoder.encode(userRequestDto.password());
+        String encodedPassword = this.passwordEncoder.encode(registerRequestDto.password());
 
         UserModel userModel = new UserModel();
 
-        BeanUtils.copyProperties(userRequestDto, userModel);
+        BeanUtils.copyProperties(registerRequestDto, userModel);
         userModel.setPassword(encodedPassword);
         userModel.setRole(Role.USER);
 
@@ -61,9 +62,9 @@ public class AuthService {
         return this.userMapper.toDTO(userCreated);
     }
 
-    public LoginResponseDTO login(UserRequestDTO userRequestDTO) {
+    public TokenResponseDTO login(LoginRequestDTO loginRequestDTO) {
         UsernamePasswordAuthenticationToken usernamePassword =
-                new UsernamePasswordAuthenticationToken(userRequestDTO.username(), userRequestDTO.password());
+                new UsernamePasswordAuthenticationToken(loginRequestDTO.username(), loginRequestDTO.password());
 
         Authentication auth = this.authenticationManager.authenticate(usernamePassword);
 
@@ -72,7 +73,7 @@ public class AuthService {
         String token = this.jwtService.generateAccessToken(user);
         String refreshToken = this.jwtService.generateAccessToken(user);
 
-        return new LoginResponseDTO(token, refreshToken);
+        return new TokenResponseDTO(token, refreshToken);
     }
 
     public AccessResponseDTO refresh(RefreshRequestDTO refreshRequestDTO) {

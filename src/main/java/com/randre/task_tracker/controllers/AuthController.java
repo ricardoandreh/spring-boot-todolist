@@ -1,9 +1,10 @@
 package com.randre.task_tracker.controllers;
 
 import com.randre.task_tracker.dtos.jwt.AccessResponseDTO;
-import com.randre.task_tracker.dtos.jwt.LoginResponseDTO;
+import com.randre.task_tracker.dtos.jwt.TokenResponseDTO;
 import com.randre.task_tracker.dtos.jwt.RefreshRequestDTO;
-import com.randre.task_tracker.dtos.user.UserRequestDTO;
+import com.randre.task_tracker.dtos.user.RegisterRequestDTO;
+import com.randre.task_tracker.dtos.user.LoginRequestDTO;
 import com.randre.task_tracker.dtos.user.UserResponseDTO;
 import com.randre.task_tracker.services.AuthService;
 import jakarta.validation.Valid;
@@ -21,14 +22,14 @@ public class AuthController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserResponseDTO register(@RequestBody @Valid UserRequestDTO user) {
+    public UserResponseDTO register(@RequestBody @Valid RegisterRequestDTO user) {
 
         return this.authService.register(user);
     }
 
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public LoginResponseDTO login(@RequestBody @Valid UserRequestDTO user) {
+    public TokenResponseDTO login(@RequestBody @Valid LoginRequestDTO user) {
 
         return this.authService.login(user);
     }

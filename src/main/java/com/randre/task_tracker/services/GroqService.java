@@ -4,7 +4,6 @@ import com.randre.task_tracker.dtos.groq.GroqResponseDTO;
 import com.randre.task_tracker.models.TaskModel;
 import com.randre.task_tracker.repositories.ITaskRepository;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -19,13 +18,13 @@ public class GroqService {
     @Value("classpath:/prompt-template.st")
     private Resource promptTemplate;
 
-    @Autowired
-    private ITaskRepository taskRepository;
-
     private final ChatClient chatClient;
 
-    public GroqService(ChatClient.Builder chatClientBuilder) {
+    private final ITaskRepository taskRepository;
+
+    public GroqService(ChatClient.Builder chatClientBuilder, ITaskRepository taskRepository) {
         this.chatClient = chatClientBuilder.build();
+        this.taskRepository = taskRepository;
     }
 
     public String generateFeedbackByPage(Page<TaskModel> pagedTasks) {

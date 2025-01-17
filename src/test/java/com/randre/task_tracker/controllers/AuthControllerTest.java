@@ -1,9 +1,10 @@
 package com.randre.task_tracker.controllers;
 
 import com.randre.task_tracker.dtos.jwt.AccessResponseDTO;
-import com.randre.task_tracker.dtos.jwt.LoginResponseDTO;
+import com.randre.task_tracker.dtos.jwt.TokenResponseDTO;
 import com.randre.task_tracker.dtos.jwt.RefreshRequestDTO;
-import com.randre.task_tracker.dtos.user.UserRequestDTO;
+import com.randre.task_tracker.dtos.user.LoginRequestDTO;
+import com.randre.task_tracker.dtos.user.RegisterRequestDTO;
 import com.randre.task_tracker.dtos.user.UserResponseDTO;
 import com.randre.task_tracker.repositories.IUserRepository;
 import com.randre.task_tracker.services.AuthService;
@@ -45,7 +46,7 @@ class AuthControllerTest {
     private IUserRepository userRepository;
 
     private UserResponseDTO baseUserResponse;
-    private LoginResponseDTO baseLoginResponse;
+    private TokenResponseDTO baseLoginResponse;
     private AccessResponseDTO baseAccessResponse;
 
     @BeforeEach
@@ -56,7 +57,7 @@ class AuthControllerTest {
                 null,
                 LocalDateTime.now()
         );
-        this.baseLoginResponse = new LoginResponseDTO(
+        this.baseLoginResponse = new TokenResponseDTO(
                 "access-token",
                 "refresh-token"
         );
@@ -68,7 +69,7 @@ class AuthControllerTest {
     @Test
     @DisplayName("Should register a new user successfully")
     void registerUser() throws Exception {
-        when(this.authService.register(any(UserRequestDTO.class)))
+        when(this.authService.register(any(RegisterRequestDTO.class)))
                 .thenReturn(this.baseUserResponse);
         when(this.userRepository.findByUsername(anyString()))
                 .thenReturn(Optional.empty());
@@ -90,7 +91,7 @@ class AuthControllerTest {
     @Test
     @DisplayName("Should authenticate a user and return tokens")
     void loginUser() throws Exception {
-        when(this.authService.login(any(UserRequestDTO.class)))
+        when(this.authService.login(any(LoginRequestDTO.class)))
                 .thenReturn(baseLoginResponse);
 
         this.mockMvc.perform(post("/auth/login")
@@ -128,7 +129,7 @@ class AuthControllerTest {
     @Test
     @DisplayName("Should throw MethodArgumentNotValidException when username is null validation fails")
     void registerUserUsernameNull() throws Exception {
-        when(this.authService.register(any(UserRequestDTO.class)))
+        when(this.authService.register(any(RegisterRequestDTO.class)))
                 .thenReturn(this.baseUserResponse);
         when(this.userRepository.findByUsername(anyString()))
                 .thenReturn(Optional.empty());
@@ -147,7 +148,7 @@ class AuthControllerTest {
     @Test
     @DisplayName("Should throw MethodArgumentNotValidException when username is blank validation fails")
     void registerUserUsernameBlank() throws Exception {
-        when(this.authService.register(any(UserRequestDTO.class)))
+        when(this.authService.register(any(RegisterRequestDTO.class)))
                 .thenReturn(this.baseUserResponse);
         when(this.userRepository.findByUsername(anyString()))
                 .thenReturn(Optional.empty());
@@ -168,7 +169,7 @@ class AuthControllerTest {
     @Test
     @DisplayName("Should throw MethodArgumentNotValidException when password is null validation fails")
     void registerUserPasswordNull() throws Exception {
-        when(this.authService.register(any(UserRequestDTO.class)))
+        when(this.authService.register(any(RegisterRequestDTO.class)))
                 .thenReturn(this.baseUserResponse);
         when(this.userRepository.findByUsername(anyString()))
                 .thenReturn(Optional.empty());
@@ -187,7 +188,7 @@ class AuthControllerTest {
     @Test
     @DisplayName("Should throw MethodArgumentNotValidException when password is blank validation fails")
     void registerUserPasswordBlank() throws Exception {
-        when(this.authService.register(any(UserRequestDTO.class)))
+        when(this.authService.register(any(RegisterRequestDTO.class)))
                 .thenReturn(this.baseUserResponse);
         when(this.userRepository.findByUsername(anyString()))
                 .thenReturn(Optional.empty());
@@ -208,7 +209,7 @@ class AuthControllerTest {
     @Test
     @DisplayName("Should throw MethodArgumentNotValidException when name sizing validation fails")
     void registerUserNameSizing() throws Exception {
-        when(this.authService.register(any(UserRequestDTO.class)))
+        when(this.authService.register(any(RegisterRequestDTO.class)))
                 .thenReturn(this.baseUserResponse);
         when(this.userRepository.findByUsername(anyString()))
                 .thenReturn(Optional.empty());

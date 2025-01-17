@@ -1,6 +1,6 @@
 package com.randre.task_tracker.services;
 
-import com.randre.task_tracker.dtos.user.UserRequestDTO;
+import com.randre.task_tracker.dtos.user.LoginRequestDTO;
 import com.randre.task_tracker.exceptions.UserNotFoundException;
 import com.randre.task_tracker.infrastructure.security.SecurityConfig;
 import com.randre.task_tracker.repositories.IUserRepository;
@@ -37,24 +37,23 @@ public class AuthServiceIntegrationTest {
     @Test
     @DisplayName("Should throw UserNotFoundException when user is not found")
     public void whenUserNotFound_thenThrowUserNotFoundException() {
-        UserRequestDTO userRequestDto = new UserRequestDTO(
+        LoginRequestDTO loginRequestDto = new LoginRequestDTO(
                 "nonExistentUser",
-                null,
                 "rawPassword"
         );
 
-        when(this.userRepository.findByUsername(userRequestDto.username()))
+        when(this.userRepository.findByUsername(loginRequestDto.username()))
                 .thenReturn(Optional.empty());
 
         Exception exception = assertThrows(
                 InternalAuthenticationServiceException.class,
                 () -> {
-                    authService.login(userRequestDto);
+                    authService.login(loginRequestDto);
                 });
 
         assertInstanceOf(UserNotFoundException.class, exception.getCause());
         assertEquals(
-                "Usuário não encontrado: " + userRequestDto.username(),
+                "Usuário não encontrado: " + loginRequestDto.username(),
                 exception.getCause().getMessage());
     }
 }

@@ -4,12 +4,15 @@ services:
   postgres:
     image: docker.io/postgres:16.3-alpine3.20
     container_name: task-tracker-db
+    env_file: .env
     environment:
       POSTGRES_DB: task_tracker
       POSTGRES_USER: sa
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:secret}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-secret}
     ports:
       - "5432:5432"
+    networks:
+      - task-tracker-network
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
@@ -18,8 +21,6 @@ services:
       timeout: 1s
       retries: 2
       start_period: 2s
-    networks:
-      - task-tracker-network
 
   task-tracker-api:
     build:
@@ -28,28 +29,28 @@ services:
     image: task-tracker-api:latest
     container_name: task-tracker-api
     env_file: .env
-    depends_on:
-      postgres:
-        condition: service_healthy
-    ports:
-      - "8080:8080"
     environment:
       JDK_JAVA_OPTIONS: -Xms256m -Xmx512m -Dspring.profiles.active=test
       DATABASE_HOST: postgres
       DATABASE_PORT: 5432
       DATABASE_NAME: task_tracker
       DATABASE_USER: sa
-      DATABASE_PASSWORD: ${DATABASE_PASSWORD:secret}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-secret}
       GROQ_API_KEY: ${GROQ_API_KEY}
       GROQ_CHAT_MODEL: ${GROQ_CHAT_MODEL}
-      GROQ_CHAT_TEMPERATURE: ${GROQ_CHAT_TEMPERATURE:0.7}
+      GROQ_CHAT_TEMPERATURE: ${GROQ_CHAT_TEMPERATURE:-0.7}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    networks:
+      - task-tracker-network
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
       interval: 30s
       timeout: 10s
       retries: 3
-    networks:
-      - task-tracker-network
 
 volumes:
   postgres-data:
