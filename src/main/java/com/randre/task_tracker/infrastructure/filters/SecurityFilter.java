@@ -39,6 +39,8 @@ public class SecurityFilter {
                         .requestMatchers(HttpMethod.DELETE, "/tasks/{id}").hasAuthority(Permission.DELETE_TASK.name())
                         .requestMatchers(HttpMethod.GET, "/tasks/search\\?**").hasAuthority(Permission.SEARCH_TASKS.name())
 
+                        .requestMatchers(HttpMethod.POST, "/ia/tasks/{ids}").hasAuthority(Permission.GROQ_REQUEST.name())
+
                         // Dev settings
                         .requestMatchers(HttpMethod.GET, "/docs").permitAll()
                         .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()

@@ -13,4 +13,6 @@ public enum Permission {
     DELETE_TASK,
 
     SEARCH_TASKS,
+
+    GROQ_REQUEST,
 }

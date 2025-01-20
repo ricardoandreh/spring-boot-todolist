@@ -7,12 +7,14 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
+@PreAuthorize("hasAuthority('GROQ_REQUEST')")
 public class GroqService {
 
     @Value("classpath:/system-prompt-template.st")

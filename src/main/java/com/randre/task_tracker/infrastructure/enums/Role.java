@@ -15,6 +15,7 @@ public enum Role {
             Permission.UPDATE_TASK,
             Permission.DELETE_TASK,
             Permission.SEARCH_TASKS)
+            //Permission.GROQ_REQUEST)
     );
 
     private final List<Permission> permissions;

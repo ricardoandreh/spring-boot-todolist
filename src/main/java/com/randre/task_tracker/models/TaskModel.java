@@ -21,9 +21,9 @@ import java.util.UUID;
 @Table
 @Getter
 @Setter
-@Entity(name = "tb_tasks")
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity(name = "tb_tasks")
 @DateRange(
         startDateField = "startAt",
         endDateField = "endAt"
@@ -57,7 +57,7 @@ public class TaskModel {
     private LocalDateTime createdAt;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnore
     @JoinColumn(name = "user_id")
     private UserModel user;
