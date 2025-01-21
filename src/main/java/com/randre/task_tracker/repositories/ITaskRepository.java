@@ -14,6 +14,6 @@ public interface ITaskRepository extends JpaRepository<TaskModel, UUID> {
 
     Page<TaskModel> findByUserUsername(String username, Pageable pageable);
 
-    @Query("SELECT t FROM tb_tasks t WHERE t.title LIKE %?1%")
-    Page<TaskModel> findByTitle(String title, Pageable pageable);
+    @Query
+    Page<TaskModel> findByUserUsernameAndTitle(String username, String title, Pageable pageable);
 }

@@ -7,6 +7,7 @@ import com.randre.task_tracker.exceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -76,5 +77,12 @@ public class RestExceptionHandler {
     public RestExceptionMessage userNotFoundException(UserNotFoundException e) {
 
         return new RestExceptionMessage(HttpStatus.NOT_FOUND.value(), e.getMessage());
+    }
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public RestExceptionMessage authorizationDeniedException(AuthorizationDeniedException e) {
+
+        return new RestExceptionMessage(HttpStatus.FORBIDDEN.value(), e.getMessage());
     }
 }

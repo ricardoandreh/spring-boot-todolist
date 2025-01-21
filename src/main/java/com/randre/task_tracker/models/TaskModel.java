@@ -9,21 +9,21 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Table
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "tb_tasks")
+@Table(name = "tb_tasks", indexes = {
+        @Index(name = "idx_user_id", columnList = "user_id")
+})
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @DateRange(
         startDateField = "startAt",
         endDateField = "endAt"
@@ -32,6 +32,7 @@ public class TaskModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @EqualsAndHashCode.Include
     private UUID id;
 
     @NotBlank
@@ -50,14 +51,14 @@ public class TaskModel {
     private LocalDateTime endAt;
 
     @NotNull
-    @Enumerated
+    @Enumerated(EnumType.ORDINAL)
     private Priority priority;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "user_id")
     private UserModel user;
@@ -70,7 +71,6 @@ public class TaskModel {
                 ", startAt=" + this.startAt +
                 ", endAt=" + this.endAt +
                 ", priority=" + this.priority +
-                ", createdAt=" + this.createdAt +
                 '}';
     }
 }

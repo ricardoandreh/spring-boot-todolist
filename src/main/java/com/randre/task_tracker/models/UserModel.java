@@ -7,10 +7,7 @@ import com.randre.task_tracker.infrastructure.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,16 +19,20 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Table
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "tb_users")
+@Table(name = "tb_users", indexes = {
+        @Index(name = "idx_user_username", columnList = "username")
+})
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class UserModel implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @EqualsAndHashCode.Include
     private UUID id;
 
     @NotBlank
@@ -47,7 +48,7 @@ public class UserModel implements UserDetails {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Enumerated
+    @Enumerated(EnumType.ORDINAL)
     private Role role;
 
     @JsonIgnore

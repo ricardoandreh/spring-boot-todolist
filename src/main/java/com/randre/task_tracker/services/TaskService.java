@@ -77,7 +77,9 @@ public class TaskService {
     public TaskPaginationDTO search(String query, int page, int size, String sortBy, boolean ascending) {
         Pageable pageable = this.getPageable(page, size, sortBy, ascending);
 
-        Page<TaskModel> tasks = this.taskRepository.findByTitle(query, pageable);
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Page<TaskModel> tasks = this.taskRepository.findByUserUsernameAndTitle(username, query, pageable);
 
         return this.taskMapper.toPaginationDTO(tasks, pageable, sortBy, ascending, null);
     }
