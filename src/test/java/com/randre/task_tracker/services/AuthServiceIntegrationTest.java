@@ -4,10 +4,10 @@ import com.randre.task_tracker.dtos.user.LoginRequestDTO;
 import com.randre.task_tracker.exceptions.UserNotFoundException;
 import com.randre.task_tracker.infrastructure.security.SecurityConfig;
 import com.randre.task_tracker.repositories.IUserRepository;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -20,19 +20,17 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@RequiredArgsConstructor
 public class AuthServiceIntegrationTest {
 
-    @Autowired
-    private AuthService authService;
+    private final AuthService authService;
 
-    @Autowired
-    private SecurityConfig securityConfig;
+    private final SecurityConfig securityConfig;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Mock
     private IUserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Test
     @DisplayName("Should throw UserNotFoundException when user is not found")

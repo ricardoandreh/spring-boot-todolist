@@ -4,10 +4,10 @@ import com.randre.task_tracker.exceptions.AccessDeniedException;
 import com.randre.task_tracker.exceptions.TaskNotFoundException;
 import com.randre.task_tracker.exceptions.UserAlreadyExistsException;
 import com.randre.task_tracker.exceptions.UserNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -17,13 +17,13 @@ import org.springframework.security.authentication.BadCredentialsException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
+@RequiredArgsConstructor
 class RestExceptionHandlerTest {
 
     @InjectMocks
     private RestExceptionHandler restExceptionHandler;
 
-    @Autowired
-    private MessageSource messageSource;
+    private final MessageSource messageSource;
 
     @Test
     @DisplayName("Should handle UserNotFoundException")

@@ -6,19 +6,19 @@ import com.randre.task_tracker.dtos.task.TaskResponseDTO;
 import com.randre.task_tracker.dtos.task.TaskUpdateDTO;
 import com.randre.task_tracker.services.TaskService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
 @RestController
+@RequiredArgsConstructor
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/tasks")
 public class TaskController {
 
-    @Autowired
-    private TaskService taskService;
+    private final TaskService taskService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

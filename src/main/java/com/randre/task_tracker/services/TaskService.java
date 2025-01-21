@@ -12,8 +12,8 @@ import com.randre.task_tracker.models.UserModel;
 import com.randre.task_tracker.repositories.ITaskRepository;
 import com.randre.task_tracker.repositories.IUserRepository;
 import com.randre.task_tracker.utils.Utils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,22 +27,18 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class TaskService {
 
-    @Autowired
-    private GroqService groqService;
+    private final GroqService groqService;
 
-    @Autowired
-    private ITaskRepository taskRepository;
+    private final ITaskRepository taskRepository;
 
-    @Autowired
-    private IUserRepository userRepository;
+    private final IUserRepository userRepository;
 
-    @Autowired
-    private TaskMapper taskMapper;
+    private final TaskMapper taskMapper;
 
-    @Autowired
-    private MessageSource messageSource;
+    private final MessageSource messageSource;
 
     public TaskResponseDTO create(TaskRequestDTO taskRequestDto) {
         TaskModel taskModel = new TaskModel();
@@ -58,7 +54,6 @@ public class TaskService {
 
         return this.taskMapper.toDTO(taskCreated);
     }
-
 
     @PreAuthorize("@taskAuthorizationService.isTaskOwner(#id, principal.id)")
     public TaskResponseDTO getOne(UUID id) {
@@ -107,13 +102,13 @@ public class TaskService {
         return this.taskMapper.toDTO(task);
     }
 
-    public TaskModel findTaskById(UUID id) {
+    private TaskModel findTaskById(UUID id) {
 
         return this.taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(this.messageSource));
     }
 
-    public UserDetails findUserByUsername(String username) {
+    private UserDetails findUserByUsername(String username) {
 
         return this.userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException(this.messageSource));

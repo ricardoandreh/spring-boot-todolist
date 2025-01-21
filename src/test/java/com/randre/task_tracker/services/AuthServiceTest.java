@@ -11,13 +11,13 @@ import com.randre.task_tracker.infrastructure.enums.Role;
 import com.randre.task_tracker.mappers.UserMapper;
 import com.randre.task_tracker.models.UserModel;
 import com.randre.task_tracker.repositories.IUserRepository;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,10 +35,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
+@RequiredArgsConstructor
 class AuthServiceTest {
 
-    @Autowired
-    private MessageSource messageSourceAutowired;
+    private final MessageSource messageSourceInjected;
 
     @InjectMocks
     private AuthService authService;
@@ -183,7 +183,7 @@ class AuthServiceTest {
     @DisplayName("Should throw UserNotFoundException")
     void loginUserUserNotFoundException() {
         when(this.authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
-                .thenThrow(new UserNotFoundException(this.messageSourceAutowired, this.registerRequestDto.username()));
+                .thenThrow(new UserNotFoundException(this.messageSourceInjected, this.registerRequestDto.username()));
 
         assertThrows(UserNotFoundException.class, () ->
                 this.authService.login(this.loginRequestDto));
@@ -226,7 +226,7 @@ class AuthServiceTest {
         when(this.jwtService.validateToken(refreshRequestDto.refreshToken()))
                 .thenReturn("user");
         when(this.userRepository.findByUsername("user"))
-                .thenThrow(new UserNotFoundException(this.messageSourceAutowired));
+                .thenThrow(new UserNotFoundException(this.messageSourceInjected));
 
         assertThrows(UserNotFoundException.class, () ->
                 this.authService.refresh(refreshRequestDto));
