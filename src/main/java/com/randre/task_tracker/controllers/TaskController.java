@@ -4,7 +4,7 @@ import com.randre.task_tracker.dtos.task.TaskPaginationDTO;
 import com.randre.task_tracker.dtos.task.TaskRequestDTO;
 import com.randre.task_tracker.dtos.task.TaskResponseDTO;
 import com.randre.task_tracker.dtos.task.TaskUpdateDTO;
-import com.randre.task_tracker.services.TaskService;
+import com.randre.task_tracker.services.impl.TaskServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ import java.util.UUID;
 @RequestMapping("/tasks")
 public class TaskController {
 
-    private final TaskService taskService;
+    private final TaskServiceImpl taskService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

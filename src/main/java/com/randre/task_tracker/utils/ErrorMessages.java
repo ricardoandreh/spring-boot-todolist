@@ -1,4 +1,4 @@
-package com.randre.task_tracker.constants;
+package com.randre.task_tracker.utils;
 
 public class ErrorMessages {
     public static final String USER_NOT_FOUND = "Usuário não encontrado";

@@ -1,6 +1,6 @@
-package com.randre.task_tracker.validations.annotations;
+package com.randre.task_tracker.annotations.validations;
 
-import com.randre.task_tracker.validations.validators.NullOrNotBlankValidator;
+import com.randre.task_tracker.annotations.validators.NullOrNotBlankValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 

@@ -1,7 +1,7 @@
-package com.randre.task_tracker.validations.annotations;
+package com.randre.task_tracker.annotations.validations;
 
-import com.randre.task_tracker.constants.ErrorMessages;
-import com.randre.task_tracker.validations.validators.FutureDateValidator;
+import com.randre.task_tracker.utils.ErrorMessages;
+import com.randre.task_tracker.annotations.validators.FutureDateValidator;
 import jakarta.validation.Constraint;
 import org.springframework.context.PayloadApplicationEvent;
 

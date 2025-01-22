@@ -1,6 +1,6 @@
-package com.randre.task_tracker.validations.validators;
+package com.randre.task_tracker.annotations.validators;
 
-import com.randre.task_tracker.validations.annotations.FutureDate;
+import com.randre.task_tracker.annotations.validations.FutureDate;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

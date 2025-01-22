@@ -7,8 +7,8 @@ import com.randre.task_tracker.dtos.user.LoginRequestDTO;
 import com.randre.task_tracker.dtos.user.RegisterRequestDTO;
 import com.randre.task_tracker.dtos.user.UserResponseDTO;
 import com.randre.task_tracker.repositories.IUserRepository;
-import com.randre.task_tracker.services.AuthService;
-import com.randre.task_tracker.services.JwtService;
+import com.randre.task_tracker.services.impl.AuthServiceImpl;
+import com.randre.task_tracker.services.impl.JwtServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -37,10 +37,10 @@ class AuthControllerTest {
     private final MockMvc mockMvc;
 
     @Mock
-    private AuthService authService;
+    private AuthServiceImpl authService;
 
     @Mock
-    private JwtService jwtService;
+    private JwtServiceImpl jwtService;
 
     @Mock
     private IUserRepository userRepository;

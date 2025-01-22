@@ -1,6 +1,7 @@
-package com.randre.task_tracker.services;
+package com.randre.task_tracker.services.impl;
 
-import com.randre.task_tracker.constants.SecurityConstants;
+import com.randre.task_tracker.services.interfaces.JwtService;
+import com.randre.task_tracker.utils.SecurityConstants;
 import com.randre.task_tracker.models.UserModel;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 
 @Service
-public class JwtService {
+public class JwtServiceImpl implements JwtService {
 
     @Value("${api.security.token.secret}")
     private String secret;

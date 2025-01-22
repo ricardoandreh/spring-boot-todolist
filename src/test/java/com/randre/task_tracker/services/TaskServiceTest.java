@@ -12,6 +12,7 @@ import com.randre.task_tracker.models.TaskModel;
 import com.randre.task_tracker.models.UserModel;
 import com.randre.task_tracker.repositories.ITaskRepository;
 import com.randre.task_tracker.repositories.IUserRepository;
+import com.randre.task_tracker.services.impl.TaskServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,7 +44,7 @@ import static org.mockito.Mockito.*;
 class TaskServiceTest {
 
     @InjectMocks
-    private TaskService taskService;
+    private TaskServiceImpl taskService;
 
     @Spy
     private TaskMapper taskMapper;

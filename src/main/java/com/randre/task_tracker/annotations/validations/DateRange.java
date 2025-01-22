@@ -1,7 +1,7 @@
-package com.randre.task_tracker.validations.annotations;
+package com.randre.task_tracker.annotations.validations;
 
-import com.randre.task_tracker.constants.ErrorMessages;
-import com.randre.task_tracker.validations.validators.DateRangeValidator;
+import com.randre.task_tracker.utils.ErrorMessages;
+import com.randre.task_tracker.annotations.validators.DateRangeValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 

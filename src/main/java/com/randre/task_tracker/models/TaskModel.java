@@ -1,10 +1,10 @@
 package com.randre.task_tracker.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.randre.task_tracker.constants.ErrorMessages;
+import com.randre.task_tracker.utils.ErrorMessages;
 import com.randre.task_tracker.infrastructure.enums.Priority;
-import com.randre.task_tracker.validations.annotations.DateRange;
-import com.randre.task_tracker.validations.annotations.FutureDate;
+import com.randre.task_tracker.annotations.validations.DateRange;
+import com.randre.task_tracker.annotations.validations.FutureDate;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -4,6 +4,7 @@ import com.randre.task_tracker.dtos.user.LoginRequestDTO;
 import com.randre.task_tracker.exceptions.UserNotFoundException;
 import com.randre.task_tracker.infrastructure.security.SecurityConfig;
 import com.randre.task_tracker.repositories.IUserRepository;
+import com.randre.task_tracker.services.impl.AuthServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.*;
 @RequiredArgsConstructor
 public class AuthServiceIntegrationTest {
 
-    private final AuthService authService;
+    private final AuthServiceImpl authService;
 
     private final SecurityConfig securityConfig;
 

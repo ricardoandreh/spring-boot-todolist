@@ -1,12 +1,12 @@
 package com.randre.task_tracker.controllers;
 
-import com.randre.task_tracker.constants.ErrorMessages;
+import com.randre.task_tracker.utils.ErrorMessages;
 import com.randre.task_tracker.dtos.task.TaskPaginationDTO;
 import com.randre.task_tracker.dtos.task.TaskResponseDTO;
 import com.randre.task_tracker.infrastructure.enums.Priority;
 import com.randre.task_tracker.repositories.IUserRepository;
-import com.randre.task_tracker.services.JwtService;
-import com.randre.task_tracker.services.TaskService;
+import com.randre.task_tracker.services.impl.JwtServiceImpl;
+import com.randre.task_tracker.services.impl.TaskServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,10 +35,10 @@ class TaskControllerTest {
     private final MockMvc mockMvc;
 
     @Mock
-    private TaskService taskService;
+    private TaskServiceImpl taskService;
 
     @Mock
-    private JwtService jwtService;
+    private JwtServiceImpl jwtService;
 
     @Mock
     private IUserRepository userRepository;

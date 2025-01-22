@@ -1,4 +1,4 @@
-package com.randre.task_tracker.constants;
+package com.randre.task_tracker.utils;
 
 public class SecurityConstants {
     public static final String AUTH_HEADER = "Authorization";

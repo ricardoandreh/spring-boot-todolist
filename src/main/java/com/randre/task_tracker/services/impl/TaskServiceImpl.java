@@ -1,4 +1,4 @@
-package com.randre.task_tracker.services;
+package com.randre.task_tracker.services.impl;
 
 import com.randre.task_tracker.dtos.task.TaskPaginationDTO;
 import com.randre.task_tracker.dtos.task.TaskRequestDTO;
@@ -11,6 +11,7 @@ import com.randre.task_tracker.models.TaskModel;
 import com.randre.task_tracker.models.UserModel;
 import com.randre.task_tracker.repositories.ITaskRepository;
 import com.randre.task_tracker.repositories.IUserRepository;
+import com.randre.task_tracker.services.interfaces.TaskService;
 import com.randre.task_tracker.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -19,7 +20,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -28,9 +28,9 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class TaskService {
+public class TaskServiceImpl implements TaskService {
 
-    private final GroqService groqService;
+    private final GroqServiceImpl groqService;
 
     private final ITaskRepository taskRepository;
 
@@ -55,7 +55,6 @@ public class TaskService {
         return this.taskMapper.toDTO(taskCreated);
     }
 
-    @PreAuthorize("@taskAuthorizationService.isTaskOwner(#id, principal.id)")
     public TaskResponseDTO getOne(UUID id) {
         TaskModel task = this.findTaskById(id);
 
@@ -84,7 +83,6 @@ public class TaskService {
         return this.taskMapper.toPaginationDTO(tasks, pageable, sortBy, ascending, null);
     }
 
-    @PreAuthorize("@taskAuthorizationService.isTaskOwner(#id, principal.id)")
     public TaskResponseDTO update(TaskUpdateDTO taskUpdateDto, UUID id) {
         TaskModel task = this.findTaskById(id);
 
@@ -95,7 +93,7 @@ public class TaskService {
         return this.taskMapper.toDTO(taskCreated);
     }
 
-    @PreAuthorize("@taskAuthorizationService.isTaskOwner(#id, principal.id)")
+
     public TaskResponseDTO delete(UUID id) {
         TaskModel task = this.findTaskById(id);
 

@@ -1,7 +1,7 @@
 package com.randre.task_tracker.controllers;
 
 import com.randre.task_tracker.dtos.groq.GroqResponseDTO;
-import com.randre.task_tracker.services.GroqService;
+import com.randre.task_tracker.services.impl.GroqServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,7 @@ import java.util.UUID;
 @RequestMapping("/ia")
 public class GroqController {
 
-    private final GroqService groqService;
+    private final GroqServiceImpl groqService;
 
     @PostMapping("/tasks/{ids}")
     @ResponseStatus(HttpStatus.OK)

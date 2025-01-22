@@ -11,6 +11,8 @@ import com.randre.task_tracker.infrastructure.enums.Role;
 import com.randre.task_tracker.mappers.UserMapper;
 import com.randre.task_tracker.models.UserModel;
 import com.randre.task_tracker.repositories.IUserRepository;
+import com.randre.task_tracker.services.impl.AuthServiceImpl;
+import com.randre.task_tracker.services.impl.JwtServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -41,7 +43,7 @@ class AuthServiceTest {
     private final MessageSource messageSourceInjected;
 
     @InjectMocks
-    private AuthService authService;
+    private AuthServiceImpl authService;
 
     @Spy
     private UserMapper userMapper;
@@ -59,7 +61,7 @@ class AuthServiceTest {
     private BCryptPasswordEncoder passwordEncoder;
 
     @Mock
-    private JwtService jwtService;
+    private JwtServiceImpl jwtService;
 
     private UserModel baseUser;
     private RegisterRequestDTO registerRequestDto;

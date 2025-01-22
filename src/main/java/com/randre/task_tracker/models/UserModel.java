@@ -1,8 +1,8 @@
 package com.randre.task_tracker.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.randre.task_tracker.constants.ErrorMessages;
-import com.randre.task_tracker.constants.SecurityConstants;
+import com.randre.task_tracker.utils.ErrorMessages;
+import com.randre.task_tracker.utils.SecurityConstants;
 import com.randre.task_tracker.infrastructure.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

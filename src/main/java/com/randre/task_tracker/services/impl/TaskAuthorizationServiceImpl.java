@@ -1,6 +1,7 @@
-package com.randre.task_tracker.services;
+package com.randre.task_tracker.services.impl;
 
 import com.randre.task_tracker.repositories.ITaskRepository;
+import com.randre.task_tracker.services.interfaces.TaskAuthorizationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -8,7 +9,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class TaskAuthorizationService {
+public class TaskAuthorizationServiceImpl implements TaskAuthorizationService {
 
     private final ITaskRepository taskRepository;
 

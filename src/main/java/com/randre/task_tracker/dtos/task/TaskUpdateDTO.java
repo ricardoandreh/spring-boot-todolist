@@ -1,9 +1,9 @@
 package com.randre.task_tracker.dtos.task;
 
 import com.randre.task_tracker.infrastructure.enums.Priority;
-import com.randre.task_tracker.validations.annotations.DateRange;
-import com.randre.task_tracker.validations.annotations.FutureDate;
-import com.randre.task_tracker.validations.annotations.NullOrNotBlank;
+import com.randre.task_tracker.annotations.validations.DateRange;
+import com.randre.task_tracker.annotations.validations.FutureDate;
+import com.randre.task_tracker.annotations.validations.NullOrNotBlank;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;

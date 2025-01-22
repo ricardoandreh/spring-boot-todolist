@@ -1,8 +1,9 @@
-package com.randre.task_tracker.services;
+package com.randre.task_tracker.services.impl;
 
 import com.randre.task_tracker.dtos.groq.GroqResponseDTO;
 import com.randre.task_tracker.models.TaskModel;
 import com.randre.task_tracker.repositories.ITaskRepository;
+import com.randre.task_tracker.services.interfaces.GroqService;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -15,7 +16,7 @@ import java.util.UUID;
 
 @Service
 @PreAuthorize("hasAuthority('GROQ_REQUEST')")
-public class GroqService {
+public class GroqServiceImpl implements GroqService {
 
     @Value("classpath:/system-prompt-template.st")
     private Resource systemPromptTemplate;
@@ -27,7 +28,7 @@ public class GroqService {
 
     private final ITaskRepository taskRepository;
 
-    public GroqService(ChatClient.Builder chatClientBuilder, ITaskRepository taskRepository) {
+    public GroqServiceImpl(ChatClient.Builder chatClientBuilder, ITaskRepository taskRepository) {
         this.chatClient = chatClientBuilder.build();
         this.taskRepository = taskRepository;
     }

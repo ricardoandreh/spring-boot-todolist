@@ -1,8 +1,8 @@
 package com.randre.task_tracker.infrastructure.filters;
 
-import com.randre.task_tracker.constants.SecurityConstants;
+import com.randre.task_tracker.utils.SecurityConstants;
 import com.randre.task_tracker.repositories.IUserRepository;
-import com.randre.task_tracker.services.JwtService;
+import com.randre.task_tracker.services.impl.JwtServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class FilterTaskAuth extends OncePerRequestFilter {
 
-    private final JwtService jwtService;
+    private final JwtServiceImpl jwtService;
 
     private final IUserRepository userRepository;
 

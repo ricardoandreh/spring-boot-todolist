@@ -1,8 +1,8 @@
-package com.randre.task_tracker.services;
+package com.randre.task_tracker.services.impl;
 
 import com.randre.task_tracker.dtos.jwt.AccessResponseDTO;
-import com.randre.task_tracker.dtos.jwt.TokenResponseDTO;
 import com.randre.task_tracker.dtos.jwt.RefreshRequestDTO;
+import com.randre.task_tracker.dtos.jwt.TokenResponseDTO;
 import com.randre.task_tracker.dtos.user.LoginRequestDTO;
 import com.randre.task_tracker.dtos.user.RegisterRequestDTO;
 import com.randre.task_tracker.dtos.user.UserResponseDTO;
@@ -12,6 +12,7 @@ import com.randre.task_tracker.infrastructure.enums.Role;
 import com.randre.task_tracker.mappers.UserMapper;
 import com.randre.task_tracker.models.UserModel;
 import com.randre.task_tracker.repositories.IUserRepository;
+import com.randre.task_tracker.services.interfaces.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.MessageSource;
@@ -23,9 +24,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService {
+public class AuthServiceImpl implements AuthService {
 
-    private final JwtService jwtService;
+    private final JwtServiceImpl jwtService;
 
     private final IUserRepository userRepository;
 
